@@ -17,6 +17,8 @@ public class GameInput : MonoBehaviour
         Move,
         Look,
         Jump,
+        Attack,
+        Interact
     }
     public enum UIActionEnum
     {
@@ -27,6 +29,8 @@ public class GameInput : MonoBehaviour
     public Dictionary<UIActionEnum, InputAction> UIInputActionDict;
 
     public EventHandler OnToggleInventoryAction;
+    public EventHandler OnAttackAction;
+    public EventHandler OnInteractAction;
 
 
 
@@ -48,16 +52,26 @@ public class GameInput : MonoBehaviour
     }
     private void Start()
     {
+        playerInputActionDict[PlayerActionEnum.Attack].performed += AttackAction;
+
         UIInputActionDict[UIActionEnum.Inventory].performed += InventoryUIAction;
+
+
     }
     private void OnDestroy()
     {
+        playerInputActionDict[PlayerActionEnum.Attack].performed -= AttackAction;
+
         UIInputActionDict[UIActionEnum.Inventory].performed -= InventoryUIAction;
     }
 
     private void InventoryUIAction(InputAction.CallbackContext callback)
     {
         OnToggleInventoryAction?.Invoke(this, EventArgs.Empty);
+    }
+    private void AttackAction(InputAction.CallbackContext callback)
+    {
+        OnAttackAction?.Invoke(this, EventArgs.Empty);
     }
 
     public Vector2 GetMovementVectorNormalized()

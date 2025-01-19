@@ -121,4 +121,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6740939078448bc4e9d13233c4d10867, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: Birch Tree
+  interactableObjectSO: {fileID: 11400000, guid: 7de85d10fcdaa5f44b150629f2703a0e, type: 2}

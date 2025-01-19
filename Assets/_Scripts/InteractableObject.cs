@@ -4,28 +4,28 @@ using UnityEngine;
 
 public class InteractableObject : MonoBehaviour
 {
-    [SerializeField] private string itemName;
+    [SerializeField] private InteractableObjectSO interactableObjectSO;
 
     private bool isPlayerInRange;
 
-    private void Update()
+    private void Start()
     {
-        if (IsCanPickup())
+        GameInput.Instance.OnAttackAction += (sender, args) =>
         {
-            Debug.Log("Pickup item");
-            Destroy(gameObject);
-        }
-
+            if (IsCanPickup())
+            {
+                InventorySystem.Instance.AddToInventory(this);
+            }
+        };
     }
 
     private bool IsCanPickup()
     {
-        return Input.GetKeyDown(KeyCode.Mouse0)
-        && isPlayerInRange && SelectionManager.Instance.GetIsTarget();
+        return isPlayerInRange && SelectionManager.Instance.GetIsTarget();
     }
     public string GetItemName()
     {
-        return itemName;
+        return interactableObjectSO.itemName;
     }
 
     private void OnTriggerExit(Collider other)
@@ -47,6 +47,10 @@ public class InteractableObject : MonoBehaviour
     public bool GetIsPlayerInRange()
     {
         return isPlayerInRange;
+    }
+    public InteractableObjectSO GetInteractableObjectSO()
+    {
+        return interactableObjectSO;
     }
 
 

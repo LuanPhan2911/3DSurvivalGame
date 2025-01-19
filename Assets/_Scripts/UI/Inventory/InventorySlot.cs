@@ -3,41 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ItemSlotUI : MonoBehaviour, IDropHandler
+public class InventorySlot : MonoBehaviour, IDropHandler
 {
 
-    public GameObject Item
+    public InventorySlotItem InventorySlotItem
     {
         get
         {
-            if (transform.childCount > 0)
+            if (transform.childCount == 0)
             {
-                return transform.GetChild(0).gameObject;
+                return null;
+            }
+            if (transform.GetChild(0).TryGetComponent(out InventorySlotItem inventorySlotItem))
+            {
+                return inventorySlotItem;
             }
 
             return null;
         }
     }
 
-
-
-
-
-
+    public bool IsAvailable()
+    {
+        return InventorySlotItem == null;
+    }
     public void OnDrop(PointerEventData eventData)
     {
 
 
         //if there is not item already then set our item.
-        if (!Item)
+        if (!InventorySlotItem)
         {
 
             DragDrop.itemBeingDragged.transform.SetParent(transform);
             DragDrop.itemBeingDragged.transform.localPosition = new Vector2(0, 0);
 
-
-
         }
+
 
 
     }
