@@ -6,10 +6,15 @@ using UnityEngine;
 public class SelectionManager : MonoBehaviour
 {
 
-
+    public static SelectionManager Instance { get; private set; }
     [SerializeField] private TextMeshProUGUI interactInfoText;
 
+    private bool isTarget;
 
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     void Update()
     {
@@ -20,15 +25,34 @@ public class SelectionManager : MonoBehaviour
 
             if (selectionTransform.TryGetComponent(out InteractableObject interactObject))
             {
-                interactInfoText.text = interactObject.GetItemName();
-                interactInfoText.gameObject.SetActive(true);
+                if (interactObject.GetIsPlayerInRange())
+                {
+                    //player in range that can interact to object
+
+                    interactInfoText.text = interactObject.GetItemName();
+                    interactInfoText.gameObject.SetActive(true);
+                    isTarget = true;
+                }
+
             }
             else
             {
                 interactInfoText.gameObject.SetActive(false);
+                isTarget = false;
             }
 
         }
+        else
+        {
+            // don't hit anything, hidden selection information
+            interactInfoText.gameObject.SetActive(false);
+            isTarget = false;
+        }
+    }
+
+    public bool GetIsTarget()
+    {
+        return isTarget;
     }
 
 }
