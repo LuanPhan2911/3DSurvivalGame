@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class InventorySlotContainer : MonoBehaviour
 {
-    [SerializeField] private List<InventorySlot> inventorySlotList;
+    [SerializeField] private List<InventorySlotSingle> inventorySlotList;
 
     private bool isInventoryFull = false;
 
 
-    public List<InventorySlot> GetInventorySlotList()
+    public List<InventorySlotSingle> GetInventorySlotList()
     {
         return inventorySlotList;
     }
 
-    public bool TryGetAvailableSlot(out InventorySlot availableInventorySlot)
+    public bool TryGetAvailableSlot(out InventorySlotSingle availableInventorySlot)
     {
 
-        foreach (InventorySlot inventorySlot in inventorySlotList)
+        foreach (InventorySlotSingle inventorySlot in inventorySlotList)
         {
             if (inventorySlot.IsAvailable())
             {

@@ -1,16 +1,14 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InventoryUI : BaseUI
+public class CraftingSystemUI : BaseUI
 {
-
 
     private void Start()
     {
-        GameInput.Instance.OnOpenInventoryAction += (sender, args) =>
+        GameInput.Instance.OnOpenCraftingAction += (sender, args) =>
         {
             ToggleIsOpen();
 

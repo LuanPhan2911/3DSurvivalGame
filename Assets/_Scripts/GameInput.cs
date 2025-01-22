@@ -22,13 +22,15 @@ public class GameInput : MonoBehaviour
     }
     public enum UIActionEnum
     {
-        Inventory
+        Inventory,
+        Crafting
     }
 
     public Dictionary<PlayerActionEnum, InputAction> playerInputActionDict;
     public Dictionary<UIActionEnum, InputAction> UIInputActionDict;
 
-    public EventHandler OnToggleInventoryAction;
+    public EventHandler OnOpenInventoryAction;
+    public EventHandler OnOpenCraftingAction;
     public EventHandler OnAttackAction;
     public EventHandler OnInteractAction;
 
@@ -55,6 +57,7 @@ public class GameInput : MonoBehaviour
         playerInputActionDict[PlayerActionEnum.Attack].performed += AttackAction;
 
         UIInputActionDict[UIActionEnum.Inventory].performed += InventoryUIAction;
+        UIInputActionDict[UIActionEnum.Crafting].performed += CraftingUIAction;
 
 
     }
@@ -63,11 +66,16 @@ public class GameInput : MonoBehaviour
         playerInputActionDict[PlayerActionEnum.Attack].performed -= AttackAction;
 
         UIInputActionDict[UIActionEnum.Inventory].performed -= InventoryUIAction;
+        UIInputActionDict[UIActionEnum.Crafting].performed -= CraftingUIAction;
     }
 
     private void InventoryUIAction(InputAction.CallbackContext callback)
     {
-        OnToggleInventoryAction?.Invoke(this, EventArgs.Empty);
+        OnOpenInventoryAction?.Invoke(this, EventArgs.Empty);
+    }
+    private void CraftingUIAction(InputAction.CallbackContext callback)
+    {
+        OnOpenCraftingAction?.Invoke(this, EventArgs.Empty);
     }
     private void AttackAction(InputAction.CallbackContext callback)
     {

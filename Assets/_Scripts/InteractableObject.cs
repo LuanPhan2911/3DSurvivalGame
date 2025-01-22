@@ -1,31 +1,38 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class InteractableObject : MonoBehaviour
 {
-    [SerializeField] private InteractableObjectSO interactableObjectSO;
+    [SerializeField] private InventoryItemSO inventoryItemSO;
 
     private bool isPlayerInRange;
 
     private void Start()
     {
-        GameInput.Instance.OnAttackAction += (sender, args) =>
+        GameInput.Instance.OnAttackAction += GameInput_OnAttackAction;
+    }
+    private void GameInput_OnAttackAction(object sender, EventArgs eventArgs)
+    {
+        if (IsCanInteract())
         {
-            if (IsCanPickup())
-            {
-                InventorySystem.Instance.AddToInventory(this);
-            }
-        };
+            InventorySystem.Instance.AddToInventory(this);
+        }
+    }
+    private void OnDestroy()
+    {
+        GameInput.Instance.OnAttackAction -= GameInput_OnAttackAction;
     }
 
-    private bool IsCanPickup()
+    private bool IsCanInteract()
     {
-        return isPlayerInRange && SelectionManager.Instance.GetIsTarget();
+        return isPlayerInRange && TargetPointUI.Instance.GetIsTarget() &&
+         TargetPointUI.Instance.GetInteractionGameObject() == gameObject;
     }
-    public string GetItemName()
+    public InventoryItemSO GetInventoryItemSO()
     {
-        return interactableObjectSO.itemName;
+        return inventoryItemSO;
     }
 
     private void OnTriggerExit(Collider other)
@@ -48,10 +55,7 @@ public class InteractableObject : MonoBehaviour
     {
         return isPlayerInRange;
     }
-    public InteractableObjectSO GetInteractableObjectSO()
-    {
-        return interactableObjectSO;
-    }
+
 
 
 }

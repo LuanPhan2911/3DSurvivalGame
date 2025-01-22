@@ -4,22 +4,22 @@ using UnityEngine;
 
 public class InventorySlotItem : MonoBehaviour
 {
-    private InteractableObjectSO interactableObjectSO;
-    private InventorySlot inventorySlot;
+    private InventoryItemSO inventoryItemSO;
+    private InventorySlotSingle inventorySlot;
 
 
-    public void SetInteractableObjectAdded(
-     InteractableObjectSO interactableObjectSO, InventorySlot inventorySlot)
+    public void SetInventoryItemAdded(
+     InventoryItemSO inventoryItemSO, InventorySlotSingle inventorySlot)
     {
 
-        this.interactableObjectSO = interactableObjectSO;
+        this.inventoryItemSO = inventoryItemSO;
         this.inventorySlot = inventorySlot;
     }
-    public InteractableObjectSO GetInteractableObjectSO()
+    public InventoryItemSO GetInventoryItemSO()
     {
-        return interactableObjectSO;
+        return inventoryItemSO;
     }
-    public InventorySlot GetInventorySlot()
+    public InventorySlotSingle GetInventorySlot()
     {
         return inventorySlot;
     }

@@ -28,14 +28,14 @@ public class InventorySystem : MonoBehaviour
             Debug.Log("Inventory is full");
             return;
         }
-        if (inventorySlotContainer.TryGetAvailableSlot(out InventorySlot availableInventorySlot))
+        if (inventorySlotContainer.TryGetAvailableSlot(out InventorySlotSingle availableInventorySlot))
         {
             Transform inventorySlotItemTransform = Instantiate(inventorySlotItemTransformPrefab, availableInventorySlot.transform);
 
 
             InventorySlotItem inventorySlotItem = inventorySlotItemTransform.GetComponent<InventorySlotItem>();
-            inventorySlotItem.SetInteractableObjectAdded(
-                interactableObject.GetInteractableObjectSO(), availableInventorySlot);
+            inventorySlotItem.SetInventoryItemAdded(
+                interactableObject.GetInventoryItemSO(), availableInventorySlot);
             Destroy(interactableObject.gameObject);
 
             inventorySlotItemList.Add(inventorySlotItem);

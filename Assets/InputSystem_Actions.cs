@@ -599,6 +599,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Crafting"",
+                    ""type"": ""Button"",
+                    ""id"": ""1c21bd37-2798-4a28-beb1-8d16cec866a8"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1030,6 +1039,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""Inventory"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""59221749-0c2c-4f33-926b-77cd82543b84"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Crafting"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1121,6 +1141,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
         m_UI_Inventory = m_UI.FindAction("Inventory", throwIfNotFound: true);
+        m_UI_Crafting = m_UI.FindAction("Crafting", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
@@ -1309,6 +1330,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_TrackedDevicePosition;
     private readonly InputAction m_UI_TrackedDeviceOrientation;
     private readonly InputAction m_UI_Inventory;
+    private readonly InputAction m_UI_Crafting;
     public struct UIActions
     {
         private @InputSystem_Actions m_Wrapper;
@@ -1324,6 +1346,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @TrackedDevicePosition => m_Wrapper.m_UI_TrackedDevicePosition;
         public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
         public InputAction @Inventory => m_Wrapper.m_UI_Inventory;
+        public InputAction @Crafting => m_Wrapper.m_UI_Crafting;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1366,6 +1389,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Inventory.started += instance.OnInventory;
             @Inventory.performed += instance.OnInventory;
             @Inventory.canceled += instance.OnInventory;
+            @Crafting.started += instance.OnCrafting;
+            @Crafting.performed += instance.OnCrafting;
+            @Crafting.canceled += instance.OnCrafting;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -1403,6 +1429,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Inventory.started -= instance.OnInventory;
             @Inventory.performed -= instance.OnInventory;
             @Inventory.canceled -= instance.OnInventory;
+            @Crafting.started -= instance.OnCrafting;
+            @Crafting.performed -= instance.OnCrafting;
+            @Crafting.canceled -= instance.OnCrafting;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -1490,5 +1519,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
         void OnInventory(InputAction.CallbackContext context);
+        void OnCrafting(InputAction.CallbackContext context);
     }
 }
