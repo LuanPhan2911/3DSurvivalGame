@@ -7,5 +7,5 @@ public class InventoryItemSO : ScriptableObject
 {
     public string itemName;
     public Sprite inventorySprite;
-    public string originatedFromObjectName;
+    public OriginalObjectSO originalObjectSO;
 }

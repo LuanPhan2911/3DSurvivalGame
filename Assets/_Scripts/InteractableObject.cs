@@ -5,9 +5,15 @@ using UnityEngine;
 
 public class InteractableObject : MonoBehaviour
 {
-    [SerializeField] private InventoryItemSO inventoryItemSO;
+    [SerializeField] private OriginalObjectSO originalObjectSO;
 
     private bool isPlayerInRange;
+    private int HP;
+
+    private void Awake()
+    {
+        HP = originalObjectSO.maxHP;
+    }
 
     private void Start()
     {
@@ -17,7 +23,9 @@ public class InteractableObject : MonoBehaviour
     {
         if (IsCanInteract())
         {
-            InventorySystem.Instance.AddToInventory(this);
+            SetOriginalObjectHP(Player.Instance.GetDamage());
+            int amount = GetAmountItemProvided();
+            InventorySystem.Instance.AddToInventory(this, amount);
         }
     }
     private void OnDestroy()
@@ -25,18 +33,46 @@ public class InteractableObject : MonoBehaviour
         GameInput.Instance.OnAttackAction -= GameInput_OnAttackAction;
     }
 
+    private int GetAmountItemProvided()
+    {
+        if (originalObjectSO.maxHP == 0)
+        {
+            return originalObjectSO.maxAmountItemProvided;
+        }
+        float rate = (float)Player.Instance.GetDamage() / originalObjectSO.maxHP;
+        return Mathf.RoundToInt(rate * originalObjectSO.maxAmountItemProvided);
+    }
+
+
     private bool IsCanInteract()
     {
         return isPlayerInRange && TargetPointUI.Instance.GetIsTarget() &&
          TargetPointUI.Instance.GetInteractionGameObject() == gameObject;
     }
+    private void SetOriginalObjectHP(int damage)
+    {
+        if (HP > 0)
+        {
+            HP -= damage;
+        }
+
+    }
+    public OriginalObjectSO GetOriginalObjectSO()
+    {
+        return originalObjectSO;
+    }
     public InventoryItemSO GetInventoryItemSO()
     {
-        return inventoryItemSO;
+        return originalObjectSO.inventoryItemSO;
+    }
+    public bool IsWhenDestroy()
+    {
+        return HP <= 0;
     }
 
     private void OnTriggerExit(Collider other)
     {
+
         if (other.CompareTag("Player"))
         {
             isPlayerInRange = false;
@@ -45,6 +81,7 @@ public class InteractableObject : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+
         if (other.CompareTag("Player"))
         {
             isPlayerInRange = true;

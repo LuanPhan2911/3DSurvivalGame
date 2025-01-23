@@ -29,23 +29,13 @@ public class TargetPointUI : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
+
             Transform selectionTransform = hit.transform;
+            InteractableObject interactableObject = selectionTransform.GetComponentInParent<InteractableObject>();
 
-            if (selectionTransform.TryGetComponent(out InteractableObject interactObject))
+            if (interactableObject)
             {
-
-                if (interactObject.GetIsPlayerInRange())
-                {
-                    //player in range that can interact to object
-
-                    interactedGameObject = interactObject.gameObject;
-                    isTarget = true;
-
-                    infoText.text = interactObject.GetInventoryItemSO().originatedFromObjectName;
-                    infoText.gameObject.SetActive(true);
-
-                }
-
+                UpdateInteractObject(interactableObject);
             }
             else
             {
@@ -59,6 +49,22 @@ public class TargetPointUI : MonoBehaviour
             // don't hit anything, hidden selection information
             infoText.gameObject.SetActive(false);
             isTarget = false;
+        }
+    }
+
+
+    private void UpdateInteractObject(InteractableObject interactObject)
+    {
+        if (interactObject.GetIsPlayerInRange())
+        {
+            //player in range that can interact to object
+
+            interactedGameObject = interactObject.gameObject;
+            isTarget = true;
+
+            infoText.text = interactObject.GetOriginalObjectSO().objectName;
+            infoText.gameObject.SetActive(true);
+
         }
     }
     public GameObject GetInteractionGameObject()

@@ -9,7 +9,7 @@ public class InventoryDropItem : MonoBehaviour, IDropHandler
     {
         if (DragDrop.itemBeingDragged.TryGetComponent(out InventorySlotItem inventorySlotItem))
         {
-            InventorySystem.Instance.DropItemFromInventory(inventorySlotItem);
+            InventorySystem.Instance.DropFromInventory(inventorySlotItem);
             Debug.Log("Item dropped");
         }
 

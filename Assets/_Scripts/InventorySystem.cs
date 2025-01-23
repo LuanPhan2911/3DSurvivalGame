@@ -36,14 +36,30 @@ public class InventorySystem : MonoBehaviour
             InventorySlotItem inventorySlotItem = inventorySlotItemTransform.GetComponent<InventorySlotItem>();
             inventorySlotItem.SetInventoryItemAdded(
                 interactableObject.GetInventoryItemSO(), availableInventorySlot);
-            Destroy(interactableObject.gameObject);
 
             inventorySlotItemList.Add(inventorySlotItem);
 
+            if (interactableObject.IsWhenDestroy())
+            {
+                Destroy(interactableObject.gameObject);
+            }
+
+        }
+    }
+    public void AddToInventory(InteractableObject interactableObject, int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            if (inventorySlotContainer.GetIsInventoryFull())
+            {
+                Debug.Log("Inventory is full");
+                return;
+            }
+            AddToInventory(interactableObject);
         }
     }
 
-    public void DropItemFromInventory(InventorySlotItem dropInventoryItem)
+    public void DropFromInventory(InventorySlotItem dropInventoryItem)
     {
 
         foreach (InventorySlotItem inventorySlotItem in inventorySlotItemList)

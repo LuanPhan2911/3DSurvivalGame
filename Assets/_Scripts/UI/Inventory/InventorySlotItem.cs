@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventorySlotItem : MonoBehaviour
 {
     private InventoryItemSO inventoryItemSO;
     private InventorySlotSingle inventorySlot;
+    [SerializeField] private Image itemImage;
 
 
     public void SetInventoryItemAdded(
@@ -14,6 +16,8 @@ public class InventorySlotItem : MonoBehaviour
 
         this.inventoryItemSO = inventoryItemSO;
         this.inventorySlot = inventorySlot;
+
+        itemImage.sprite = inventoryItemSO.inventorySprite;
     }
     public InventoryItemSO GetInventoryItemSO()
     {
