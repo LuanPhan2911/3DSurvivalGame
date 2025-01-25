@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8efdb6ae10c327a4893da452d799558f, type: 3}
   m_Name: Stone
   m_EditorClassIdentifier: 
+  Id: 181bfa7d-c6b3-45c0-8148-d08d0d97acbf
   itemName: Stone
-  inventorySprite: {fileID: 21300000, guid: 583675a75bcb2a941ac555b9ccd513a9, type: 3}
-  originalObjectSO: {fileID: 11400000, guid: 20f7fe33ef60225449b49a6456191300, type: 2}
+  sprite: {fileID: 21300000, guid: 583675a75bcb2a941ac555b9ccd513a9, type: 3}

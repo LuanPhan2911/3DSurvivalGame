@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,12 @@ public class InventorySystem : MonoBehaviour
 
     public static InventorySystem Instance { get; private set; }
 
+    public class OnInventoryItemChangedEventArgs : EventArgs
+    {
+        public InventoryItemSO inventoryItemSO;
+    }
+    public event EventHandler<OnInventoryItemChangedEventArgs> OnInventoryItemChanged;
+
 
     private void Awake()
     {
@@ -19,15 +26,38 @@ public class InventorySystem : MonoBehaviour
         inventorySlotItemList = new List<InventorySlotItem>();
     }
 
-
-
-    public void AddToInventory(InteractableObject interactableObject)
+    public bool IsAvailableItem(InventoryItemSO inventoryItemSO, int amount)
     {
-        if (inventorySlotContainer.GetIsInventoryFull())
+        int count = 0;
+        foreach (InventorySlotItem inventorySlotItem in inventorySlotItemList)
         {
-            Debug.Log("Inventory is full");
-            return;
+            if (inventorySlotItem.GetInventoryItemSO().Id == inventoryItemSO.Id)
+            {
+                count++;
+                if (count >= amount)
+                {
+                    return true;
+                }
+            }
+
         }
+        return false;
+    }
+    public int GetQuantityOfInventoryItem(InventoryItemSO inventoryItemSO)
+    {
+        int count = 0;
+        foreach (InventorySlotItem inventorySlotItem in inventorySlotItemList)
+        {
+            if (inventorySlotItem.GetInventoryItemSO().Id == inventoryItemSO.Id)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private bool TryAddToInventory(InventoryItemSO inventoryItemSO)
+    {
         if (inventorySlotContainer.TryGetAvailableSlot(out InventorySlotSingle availableInventorySlot))
         {
             Transform inventorySlotItemTransform = Instantiate(inventorySlotItemTransformPrefab, availableInventorySlot.transform);
@@ -35,31 +65,55 @@ public class InventorySystem : MonoBehaviour
 
             InventorySlotItem inventorySlotItem = inventorySlotItemTransform.GetComponent<InventorySlotItem>();
             inventorySlotItem.SetInventoryItemAdded(
-                interactableObject.GetInventoryItemSO(), availableInventorySlot);
+                inventoryItemSO, availableInventorySlot);
 
             inventorySlotItemList.Add(inventorySlotItem);
 
+            OnInventoryItemChanged?.Invoke(this, new OnInventoryItemChangedEventArgs
+            {
+                inventoryItemSO = inventoryItemSO
+            });
+
+            return true;
+        }
+        else
+        {
+            // trigger inventory full
+            Debug.Log("Inventory full");
+            return false;
+        }
+
+    }
+
+    private void TryAddToInventory(InteractableObject interactableObject)
+    {
+
+        if (TryAddToInventory(interactableObject.GetInventoryItemSO()))
+        {
             if (interactableObject.IsWhenDestroy())
             {
                 Destroy(interactableObject.gameObject);
             }
-
         }
+
     }
-    public void AddToInventory(InteractableObject interactableObject, int amount)
+
+    public void AddToInventory(InteractableObject interactableObject, int amount = 1)
     {
         for (int i = 0; i < amount; i++)
         {
-            if (inventorySlotContainer.GetIsInventoryFull())
-            {
-                Debug.Log("Inventory is full");
-                return;
-            }
-            AddToInventory(interactableObject);
+            TryAddToInventory(interactableObject);
+        }
+    }
+    public void AddToInventory(InventoryItemSO inventoryItemSO, int amount = 1)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            TryAddToInventory(inventoryItemSO);
         }
     }
 
-    public void DropFromInventory(InventorySlotItem dropInventoryItem)
+    public void RemoveItemInInventory(InventorySlotItem dropInventoryItem)
     {
 
         foreach (InventorySlotItem inventorySlotItem in inventorySlotItemList)
@@ -67,9 +121,41 @@ public class InventorySystem : MonoBehaviour
             if (inventorySlotItem == dropInventoryItem)
             {
                 inventorySlotItemList.Remove(inventorySlotItem);
-                break;
+                OnInventoryItemChanged?.Invoke(this, new OnInventoryItemChangedEventArgs
+                {
+                    inventoryItemSO = dropInventoryItem.GetInventoryItemSO()
+                });
+                Destroy(dropInventoryItem.gameObject);
+                return;
             }
         }
-        Destroy(dropInventoryItem.gameObject);
+
+    }
+    public void RemoveItemInInventory(InventoryItemSO inventoryItemSO, int amount = 1)
+    {
+
+        int count = 0;
+        for (int i = inventorySlotItemList.Count - 1; i > 0; i--)
+        {
+            InventorySlotItem inventorySlotItem = inventorySlotItemList[i];
+            if (inventorySlotItem.GetInventoryItemSO().Id == inventoryItemSO.Id)
+            {
+                inventorySlotItemList.RemoveAt(i);
+                Destroy(inventorySlotItem.gameObject);
+                count++;
+
+                if (count >= amount)
+                {
+                    // remove enough;
+
+                    OnInventoryItemChanged?.Invoke(this, new OnInventoryItemChangedEventArgs
+                    {
+                        inventoryItemSO = inventoryItemSO
+                    });
+                    return;
+                }
+            }
+
+        }
     }
 }

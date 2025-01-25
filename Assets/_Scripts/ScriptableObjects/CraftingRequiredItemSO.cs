@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu()]
-public class CraftingRequiredItemSO : ScriptableObject
+public class CraftingRequiredItemSO : BaseScriptableObject
 {
     public InventoryItemSO inventoryItemSO;
     public int quantity;

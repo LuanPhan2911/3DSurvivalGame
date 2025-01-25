@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 254bd9a9c65e66e4286f59e0665c0672, type: 3}
   m_Name: PiclAxeReq2
   m_EditorClassIdentifier: 
+  Id: d51537db-4b96-4794-a81e-ad85b164da2f
   inventoryItemSO: {fileID: 11400000, guid: 7de85d10fcdaa5f44b150629f2703a0e, type: 2}
   quantity: 1

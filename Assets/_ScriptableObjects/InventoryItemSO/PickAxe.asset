@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8efdb6ae10c327a4893da452d799558f, type: 3}
-  m_Name: Meat
+  m_Name: PickAxe
   m_EditorClassIdentifier: 
-  Id: 373b398c-73a7-4c61-98b8-d5965a57df41
-  itemName: Meat
-  sprite: {fileID: 21300000, guid: 1c728f7cc6548f24cadceb6478fa25cc, type: 3}
+  Id: 6226b937-31a2-4541-86b4-6b515de2189b
+  itemName: Pick Axe
+  sprite: {fileID: 21300000, guid: b54b94da5cee5c046bf327246ac181e6, type: 3}

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8efdb6ae10c327a4893da452d799558f, type: 3}
   m_Name: Wood
   m_EditorClassIdentifier: 
+  Id: 0daa11d2-337f-49ee-ba8a-62f5a9956f78
   itemName: Wood
-  inventorySprite: {fileID: 21300000, guid: 65c59ccc59b5690458cb9e5324edc5dc, type: 3}
-  originalObjectSO: {fileID: 11400000, guid: 0aea0ac7f4693f445b08cf799c4d8d72, type: 2}
+  sprite: {fileID: 21300000, guid: 65c59ccc59b5690458cb9e5324edc5dc, type: 3}

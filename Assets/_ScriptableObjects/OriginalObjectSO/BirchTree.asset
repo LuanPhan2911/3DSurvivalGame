@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54b10c1397821094ebef8300ce8f45aa, type: 3}
   m_Name: BirchTree
   m_EditorClassIdentifier: 
+  Id: 2c9f5daf-d52a-418b-8aa2-c1bc55654a2d
   objectName: Birch Tree
   inventoryItemSO: {fileID: 11400000, guid: 7de85d10fcdaa5f44b150629f2703a0e, type: 2}
   maxHP: 20

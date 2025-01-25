@@ -12,12 +12,12 @@ public class CraftingItemButtonContainer : MonoBehaviour
     {
         foreach (CraftingItemButtonSingle craftItemButtonSingle in craftItemButtonSingleList)
         {
-            craftItemButtonSingle.OnButtonClick += CraftItemButton_OnClick;
+            craftItemButtonSingle.GetButton().onClick.AddListener(() => CraftItemButton_OnClick(craftItemButtonSingle));
         }
     }
-    private void CraftItemButton_OnClick(object sender, EventArgs eventArgs)
+    private void CraftItemButton_OnClick(CraftingItemButtonSingle selectedButton)
     {
-        CraftingItemButtonSingle selectedButton = sender as CraftingItemButtonSingle;
+
         foreach (CraftingItemButtonSingle craftItemButton in craftItemButtonSingleList)
         {
             if (selectedButton == craftItemButton)
@@ -30,13 +30,7 @@ public class CraftingItemButtonContainer : MonoBehaviour
             }
         }
     }
-    private void OnDestroy()
-    {
-        foreach (CraftingItemButtonSingle craftItemButtonSingle in craftItemButtonSingleList)
-        {
-            craftItemButtonSingle.OnButtonClick -= CraftItemButton_OnClick;
-        }
-    }
+
 
 
 

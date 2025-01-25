@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu()]
-public class CraftingItemSO : ScriptableObject
+public class CraftingItemSO : BaseScriptableObject
 {
-    public string craftingItemName;
-    public Sprite itemImage;
+    public InventoryItemSO inventoryItemSO;
 
     public List<CraftingRequiredItemSO> craftingRequiredItemSOList;
 

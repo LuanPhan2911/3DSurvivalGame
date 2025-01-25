@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54b10c1397821094ebef8300ce8f45aa, type: 3}
   m_Name: RabbitSmall
   m_EditorClassIdentifier: 
+  Id: 242f25d1-a2cf-42da-bd1b-a5860781046a
   objectName: Rabbit
   inventoryItemSO: {fileID: 11400000, guid: beb5bd1ddfd17c642a1f0c82420734fd, type: 2}
   maxHP: 0

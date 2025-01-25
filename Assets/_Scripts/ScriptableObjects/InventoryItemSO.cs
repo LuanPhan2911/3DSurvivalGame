@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu()]
-public class InventoryItemSO : ScriptableObject
+public class InventoryItemSO : BaseScriptableObject
 {
     public string itemName;
-    public Sprite inventorySprite;
-    public OriginalObjectSO originalObjectSO;
+    public Sprite sprite;
+
 }

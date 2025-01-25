@@ -17,7 +17,7 @@ public class InventorySlotItem : MonoBehaviour
         this.inventoryItemSO = inventoryItemSO;
         this.inventorySlot = inventorySlot;
 
-        itemImage.sprite = inventoryItemSO.inventorySprite;
+        itemImage.sprite = inventoryItemSO.sprite;
     }
     public InventoryItemSO GetInventoryItemSO()
     {

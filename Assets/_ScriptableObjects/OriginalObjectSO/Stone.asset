@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54b10c1397821094ebef8300ce8f45aa, type: 3}
   m_Name: Stone
   m_EditorClassIdentifier: 
+  Id: 8856c11a-a516-4d3b-9f4e-0dc6ac6ed371
   objectName: Stone
   inventoryItemSO: {fileID: 11400000, guid: d52b59d18728f6e48b8576ea4ecda2fa, type: 2}
   maxHP: 0

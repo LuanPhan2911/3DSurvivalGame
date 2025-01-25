@@ -5,6 +5,7 @@ using UnityEngine;
 public class AIMovement : MonoBehaviour
 {
 
+
     [SerializeField] private Animator animator;
 
     [SerializeField] private float moveSpeed = 0.2f;

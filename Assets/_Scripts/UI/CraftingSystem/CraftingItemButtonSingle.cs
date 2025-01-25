@@ -14,7 +14,12 @@ public class CraftingItemButtonSingle : MonoBehaviour
 
     [SerializeField] private Image image;
 
-    public event EventHandler OnButtonClick;
+
+
+    public Button GetButton()
+    {
+        return button;
+    }
 
     private void Awake()
     {
@@ -23,13 +28,12 @@ public class CraftingItemButtonSingle : MonoBehaviour
         {
             craftingItemUI.SetCraftingItemSO(craftingItemSO);
             craftingItemUI.Show();
-            OnButtonClick?.Invoke(this, EventArgs.Empty);
         });
         HideSelectedGameObject();
     }
     private void Start()
     {
-        image.sprite = craftingItemSO.itemImage;
+        image.sprite = craftingItemSO.inventoryItemSO.sprite;
     }
 
 

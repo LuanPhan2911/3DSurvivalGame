@@ -19,9 +19,14 @@ public class CraftingItemUI : BaseUI
     {
         this.craftingItemSO = craftingItemSO;
 
-        titleText.text = craftingItemSO.craftingItemName;
-        itemImage.sprite = craftingItemSO.itemImage;
+        titleText.text = craftingItemSO.inventoryItemSO.itemName;
+        itemImage.sprite = craftingItemSO.inventoryItemSO.sprite;
 
+        UpdateRequiredItemText();
+        UpdateCraftButton();
+    }
+    private void UpdateRequiredItemText()
+    {
         foreach (Transform child in requiredItemContainerTransform)
         {
             if (child == requiredItemTransformPrefab)
@@ -37,15 +42,65 @@ public class CraftingItemUI : BaseUI
         {
             Transform requiredItemTransform = Instantiate(requiredItemTransformPrefab, requiredItemContainerTransform);
 
-            requiredItemTransform.GetComponent<RequiredItem>().SetRequiredItemText(craftingRequiredItemSO, 0);
+            int quantity = InventorySystem.Instance.GetQuantityOfInventoryItem(craftingRequiredItemSO.inventoryItemSO);
+            requiredItemTransform.GetComponent<RequiredItem>().SetRequiredItemText(craftingRequiredItemSO, quantity);
             requiredItemTransform.gameObject.SetActive(true);
+        }
+    }
+    private void UpdateCraftButton()
+    {
+        if (CraftingSystem.Instance.IsEnoughRequiredItemToCraft(craftingItemSO.craftingRequiredItemSOList))
+        {
+            craftButton.enabled = true;
+        }
+        else
+        {
+            craftButton.enabled = false;
         }
     }
 
     private void Start()
     {
         requiredItemTransformPrefab.gameObject.SetActive(false);
+        InventorySystem.Instance.OnInventoryItemChanged += InventoryItemChanged;
 
+        craftButton.onClick.AddListener(() =>
+        {
+            CraftingSystem.Instance.Craft(craftingItemSO);
+            Debug.Log("Craft");
+        });
         Hide();
+    }
+    private void OnDestroy()
+    {
+        InventorySystem.Instance.OnInventoryItemChanged -= InventoryItemChanged;
+    }
+    private void InventoryItemChanged(object sender, InventorySystem.OnInventoryItemChangedEventArgs args)
+    {
+
+        if (IsCraftingRequiredItemChange(args.inventoryItemSO))
+        {
+            UpdateRequiredItemText();
+            UpdateCraftButton();
+        }
+
+    }
+
+    private bool IsCraftingRequiredItemChange(InventoryItemSO inventoryItemSO)
+    {
+        if (craftingItemSO == null)
+        {
+            // not set crafting item so
+            return false;
+        }
+        foreach (CraftingRequiredItemSO craftingRequiredItemSO in craftingItemSO.craftingRequiredItemSOList)
+        {
+            if (craftingRequiredItemSO.inventoryItemSO.Id == inventoryItemSO.Id)
+            {
+                return true;
+            }
+        }
+        // not required item change
+        return false;
     }
 }
