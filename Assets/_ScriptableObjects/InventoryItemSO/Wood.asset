@@ -15,3 +15,4 @@ MonoBehaviour:
   Id: 0daa11d2-337f-49ee-ba8a-62f5a9956f78
   itemName: Wood
   sprite: {fileID: 21300000, guid: 65c59ccc59b5690458cb9e5324edc5dc, type: 3}
+  maxAmountInSlot: 10

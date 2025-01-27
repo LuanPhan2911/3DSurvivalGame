@@ -33,7 +33,7 @@ public class InventorySystem : MonoBehaviour
         {
             if (inventorySlotItem.GetInventoryItemSO().Id == inventoryItemSO.Id)
             {
-                count++;
+                count += inventorySlotItem.GetAmountInSlot();
                 if (count >= amount)
                 {
                     return true;
@@ -50,66 +50,116 @@ public class InventorySystem : MonoBehaviour
         {
             if (inventorySlotItem.GetInventoryItemSO().Id == inventoryItemSO.Id)
             {
-                count++;
+                count += inventorySlotItem.GetAmountInSlot();
             }
         }
         return count;
     }
 
-    private bool TryAddToInventory(InventoryItemSO inventoryItemSO)
+    private void InstantiateInventorySlotItem(InventorySlotSingle inventorySlotSingle, InventoryItemSO inventoryItemSO, int amount)
     {
-        if (inventorySlotContainer.TryGetAvailableSlot(out InventorySlotSingle availableInventorySlot))
+        Transform inventorySlotItemTransform = Instantiate(inventorySlotItemTransformPrefab, inventorySlotSingle.transform);
+
+        InventorySlotItem inventorySlotItem = inventorySlotItemTransform.GetComponent<InventorySlotItem>();
+        inventorySlotItem.SetInventoryItemAdded(
+            inventoryItemSO, inventorySlotSingle, amount);
+
+        inventorySlotItemList.Add(inventorySlotItem);
+
+    }
+
+    private void TryAddToInventory(InventoryItemSO inventoryItemSO, int amount)
+    {
+        if (inventorySlotContainer.TryGetAvailableSlot(inventoryItemSO, out InventorySlotSingle availableInventorySlot))
         {
-            Transform inventorySlotItemTransform = Instantiate(inventorySlotItemTransformPrefab, availableInventorySlot.transform);
 
-
-            InventorySlotItem inventorySlotItem = inventorySlotItemTransform.GetComponent<InventorySlotItem>();
-            inventorySlotItem.SetInventoryItemAdded(
-                inventoryItemSO, availableInventorySlot);
-
-            inventorySlotItemList.Add(inventorySlotItem);
-
-            OnInventoryItemChanged?.Invoke(this, new OnInventoryItemChangedEventArgs
+            if (availableInventorySlot.GetRemainAvailableSlot(inventoryItemSO) == inventoryItemSO.maxAmountInSlot)
             {
-                inventoryItemSO = inventoryItemSO
-            });
 
-            return true;
+                InstantiateInventorySlotItem(availableInventorySlot, inventoryItemSO, amount);
+
+                OnInventoryItemChanged?.Invoke(this, new OnInventoryItemChangedEventArgs
+                {
+                    inventoryItemSO = inventoryItemSO
+                });
+            }
+            else if (amount <= availableInventorySlot.GetRemainAvailableSlot(inventoryItemSO))
+            {
+
+                // slot can contain more item
+                availableInventorySlot.InventorySlotItem.AddAmountInSlot(amount);
+                OnInventoryItemChanged?.Invoke(this, new OnInventoryItemChangedEventArgs
+                {
+                    inventoryItemSO = inventoryItemSO
+                });
+            }
+            else
+            {
+                //slot can contain more item but not enough
+                int maxAmountAdded = availableInventorySlot.GetRemainAvailableSlot(inventoryItemSO);
+                int remainAmount = amount - maxAmountAdded;
+                availableInventorySlot.InventorySlotItem.AddAmountInSlot(maxAmountAdded);
+                // try get new available slot
+                if (inventorySlotContainer.TryGetAvailableSlot(inventoryItemSO, out InventorySlotSingle newAvailableInventorySlot))
+                {
+                    InstantiateInventorySlotItem(newAvailableInventorySlot, inventoryItemSO, remainAmount);
+                }
+                else
+                {
+                    // trigger inventory full
+                    Debug.Log("Inventory full");
+                }
+                OnInventoryItemChanged?.Invoke(this, new OnInventoryItemChangedEventArgs
+                {
+                    inventoryItemSO = inventoryItemSO
+                });
+            }
         }
         else
         {
             // trigger inventory full
             Debug.Log("Inventory full");
-            return false;
+
         }
 
     }
 
-    private void TryAddToInventory(InteractableObject interactableObject)
+    private void TryAddToInventory(InteractableObject interactableObject, int amount)
     {
+        TryAddToInventory(interactableObject.GetInventoryItemSO(), amount);
+    }
 
-        if (TryAddToInventory(interactableObject.GetInventoryItemSO()))
+    public void AddToInventory(InteractableObject interactableObject, int amount)
+    {
+        int maxAmountAdded = interactableObject.GetInventoryItemSO().maxAmountInSlot;
+
+        while (amount > 0)
         {
-            if (interactableObject.IsWhenDestroy())
-            {
-                Destroy(interactableObject.gameObject);
-            }
+            // Xác định số lượng cần thêm ở lần lặp này
+            int amountToAdd = Math.Min(amount, maxAmountAdded);
+
+            // Gọi hàm TryAddToInventory với số lượng tính toán được
+            TryAddToInventory(interactableObject, amountToAdd);
+
+            // Giảm số lượng cần thêm còn lại
+            amount -= amountToAdd;
         }
 
     }
+    public void AddToInventory(InventoryItemSO inventoryItemSO, int amount)
+    {
+        int maxAmountAdded = inventoryItemSO.maxAmountInSlot;
 
-    public void AddToInventory(InteractableObject interactableObject, int amount = 1)
-    {
-        for (int i = 0; i < amount; i++)
+        while (amount > 0)
         {
-            TryAddToInventory(interactableObject);
-        }
-    }
-    public void AddToInventory(InventoryItemSO inventoryItemSO, int amount = 1)
-    {
-        for (int i = 0; i < amount; i++)
-        {
-            TryAddToInventory(inventoryItemSO);
+            // Xác định số lượng cần thêm ở lần lặp này
+            int amountToAdd = Math.Min(amount, maxAmountAdded);
+
+            // Gọi hàm TryAddToInventory với số lượng tính toán được
+            TryAddToInventory(inventoryItemSO, amountToAdd);
+
+            // Giảm số lượng cần thêm còn lại
+            amount -= amountToAdd;
         }
     }
 
@@ -131,7 +181,7 @@ public class InventorySystem : MonoBehaviour
         }
 
     }
-    public void RemoveItemInInventory(InventoryItemSO inventoryItemSO, int amount = 1)
+    public void RemoveItemInInventory(InventoryItemSO inventoryItemSO, int amount)
     {
 
         int count = 0;
@@ -140,9 +190,18 @@ public class InventorySystem : MonoBehaviour
             InventorySlotItem inventorySlotItem = inventorySlotItemList[i];
             if (inventorySlotItem.GetInventoryItemSO().Id == inventoryItemSO.Id)
             {
-                inventorySlotItemList.RemoveAt(i);
-                Destroy(inventorySlotItem.gameObject);
-                count++;
+
+                if (amount >= inventorySlotItem.GetAmountInSlot())
+                {
+                    inventorySlotItemList.RemoveAt(i);
+                    Destroy(inventorySlotItem.gameObject);
+                    count += inventorySlotItem.GetAmountInSlot();
+                }
+                else
+                {
+                    inventorySlotItem.SubAmountInSlot(amount);
+                    count += amount;
+                }
 
                 if (count >= amount)
                 {

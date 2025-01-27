@@ -8,6 +8,8 @@ public class CraftingItemButtonContainer : MonoBehaviour
     [SerializeField] private List<CraftingItemButtonSingle> craftItemButtonSingleList;
 
 
+
+
     private void Start()
     {
         foreach (CraftingItemButtonSingle craftItemButtonSingle in craftItemButtonSingleList)
@@ -28,6 +30,13 @@ public class CraftingItemButtonContainer : MonoBehaviour
             {
                 craftItemButton.HideSelectedGameObject();
             }
+        }
+    }
+    public void ResetCraftItemButton()
+    {
+        foreach (CraftingItemButtonSingle craftItemButton in craftItemButtonSingleList)
+        {
+            craftItemButton.HideSelectedGameObject();
         }
     }
 

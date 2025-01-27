@@ -5,11 +5,21 @@ using UnityEngine;
 public class CanvasManager : MonoBehaviour
 {
     private List<ICanvasManager> UIList;
+    [SerializeField] private Canvas canvas;
+    [SerializeField] private TargetPointUI targetPointUI;
 
     private bool isUIOpen;
 
+    public static CanvasManager Instance { get; private set; }
+
+    public float GetScaler()
+    {
+        return canvas.scaleFactor;
+    }
+
     private void Awake()
     {
+        Instance = this;
         UIList = new List<ICanvasManager>();
         foreach (Transform child in transform)
         {
@@ -29,10 +39,12 @@ public class CanvasManager : MonoBehaviour
         UpdateIsOpenUI();
         if (!isUIOpen)
         {
+            targetPointUI.Show();
             MouseMovement.Instance.EnableLookAround();
         }
         else
         {
+            targetPointUI.Hide();
             MouseMovement.Instance.DisabledLookAround();
         }
     }

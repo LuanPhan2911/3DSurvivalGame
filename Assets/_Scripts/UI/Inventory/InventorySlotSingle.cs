@@ -23,9 +23,38 @@ public class InventorySlotSingle : MonoBehaviour, IDropHandler
         }
     }
 
-    public bool IsAvailable()
+    public bool IsAvailable(InventoryItemSO inventoryItemSO)
     {
-        return InventorySlotItem == null;
+        if (InventorySlotItem == null)
+        {
+            return true;
+        }
+        if (InventorySlotItem.GetInventoryItemSO().Id == inventoryItemSO.Id)
+        {
+            return InventorySlotItem.GetAmountInSlot() < InventorySlotItem.GetMaxAmountInSlot();
+
+        }
+        return false;
+
+
+
+
+    }
+
+    public int GetRemainAvailableSlot(InventoryItemSO inventoryItemSO)
+    {
+        if (InventorySlotItem == null)
+        {
+            return inventoryItemSO.maxAmountInSlot;
+        }
+        if (InventorySlotItem.GetInventoryItemSO().Id == inventoryItemSO.Id)
+        {
+            return InventorySlotItem.GetMaxAmountInSlot() - InventorySlotItem.GetAmountInSlot();
+        }
+
+        return 0;
+
+
     }
     public void OnDrop(PointerEventData eventData)
     {

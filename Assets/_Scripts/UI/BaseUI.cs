@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,7 +19,7 @@ public class BaseUI : MonoBehaviour, ICanvasManager
         });
     }
 
-    public void ToggleIsOpen()
+    public virtual void ToggleIsOpen()
     {
         isOpen = !isOpen;
         if (isOpen)
@@ -30,14 +31,27 @@ public class BaseUI : MonoBehaviour, ICanvasManager
             Hide();
         }
     }
+    public virtual void ToggleIsOpen(Action<bool> callBack)
+    {
+        isOpen = !isOpen;
+        if (isOpen)
+        {
+            Show();
+        }
+        else
+        {
+            Hide();
+        }
+        callBack(isOpen);
+    }
 
-    public void Show()
+    public virtual void Show()
     {
         isOpen = true;
         gameObject.SetActive(true);
     }
 
-    public void Hide()
+    public virtual void Hide()
     {
         isOpen = false;
         gameObject.SetActive(false);

@@ -1,19 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class CraftingSystemUI : BaseUI
+public class CraftingSystemUI : MonoBehaviour
 {
+    [SerializeField] private CraftingItemButtonContainer craftingItemButtonContainer;
 
-    private void Start()
+
+    private void OnEnable()
     {
-        GameInput.Instance.OnOpenCraftingAction += (sender, args) =>
-        {
-            ToggleIsOpen();
-
-        };
-        Hide();
+        craftingItemButtonContainer.ResetCraftItemButton();
     }
-
 }

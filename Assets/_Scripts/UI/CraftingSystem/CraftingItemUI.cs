@@ -11,7 +11,11 @@ public class CraftingItemUI : BaseUI
     [SerializeField] private Image itemImage;
     [SerializeField] private Transform requiredItemTransformPrefab;
     [SerializeField] private Transform requiredItemContainerTransform;
+
+
     [SerializeField] private Button craftButton;
+
+
 
     private CraftingItemSO craftingItemSO;
 
@@ -47,27 +51,19 @@ public class CraftingItemUI : BaseUI
             requiredItemTransform.gameObject.SetActive(true);
         }
     }
-    private void UpdateCraftButton()
-    {
-        if (CraftingSystem.Instance.IsEnoughRequiredItemToCraft(craftingItemSO.craftingRequiredItemSOList))
-        {
-            craftButton.enabled = true;
-        }
-        else
-        {
-            craftButton.enabled = false;
-        }
-    }
 
     private void Start()
     {
         requiredItemTransformPrefab.gameObject.SetActive(false);
         InventorySystem.Instance.OnInventoryItemChanged += InventoryItemChanged;
 
+
+
         craftButton.onClick.AddListener(() =>
         {
-            CraftingSystem.Instance.Craft(craftingItemSO);
-            Debug.Log("Craft");
+            CraftingSystem.Instance.SetCraftingState(
+                CraftingSystem.State.Confirm, craftingItemSO);
+
         });
         Hide();
     }
@@ -78,7 +74,7 @@ public class CraftingItemUI : BaseUI
     private void InventoryItemChanged(object sender, InventorySystem.OnInventoryItemChangedEventArgs args)
     {
 
-        if (IsCraftingRequiredItemChange(args.inventoryItemSO))
+        if (CraftingSystem.Instance.IsCraftingRequiredItemChange(craftingItemSO, args.inventoryItemSO))
         {
             UpdateRequiredItemText();
             UpdateCraftButton();
@@ -86,21 +82,20 @@ public class CraftingItemUI : BaseUI
 
     }
 
-    private bool IsCraftingRequiredItemChange(InventoryItemSO inventoryItemSO)
+    private void UpdateCraftButton()
     {
-        if (craftingItemSO == null)
+        int minAmountCraftItem = 1;
+        List<CraftingRequiredItemSO> craftingRequiredItemSOList = craftingItemSO.craftingRequiredItemSOList;
+        if (CraftingSystem.Instance.IsEnoughRequiredItemToCraft(craftingRequiredItemSOList, minAmountCraftItem))
         {
-            // not set crafting item so
-            return false;
+
+            craftButton.gameObject.SetActive(true);
         }
-        foreach (CraftingRequiredItemSO craftingRequiredItemSO in craftingItemSO.craftingRequiredItemSOList)
+        else
         {
-            if (craftingRequiredItemSO.inventoryItemSO.Id == inventoryItemSO.Id)
-            {
-                return true;
-            }
+            craftButton.gameObject.SetActive(false);
         }
-        // not required item change
-        return false;
     }
+
+
 }

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 54b10c1397821094ebef8300ce8f45aa, type: 3}
-  m_Name: BirchTree
+  m_Name: Rock
   m_EditorClassIdentifier: 
-  Id: 2c9f5daf-d52a-418b-8aa2-c1bc55654a2d
-  objectName: Birch Tree
-  inventoryItemSO: {fileID: 11400000, guid: 7de85d10fcdaa5f44b150629f2703a0e, type: 2}
+  Id: 436e9326-8a12-4384-8f40-4f2cafd18bf5
+  objectName: Rock
+  inventoryItemSO: {fileID: 11400000, guid: d52b59d18728f6e48b8576ea4ecda2fa, type: 2}
   maxHP: 20
-  maxAmountItemProvided: 50
+  maxAmountItemProvided: 20

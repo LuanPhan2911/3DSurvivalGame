@@ -26,6 +26,11 @@ public class InteractableObject : MonoBehaviour
             SetOriginalObjectHP(Player.Instance.GetDamage());
             int amount = GetAmountItemProvided();
             InventorySystem.Instance.AddToInventory(this, amount);
+
+            if (IsWhenDestroy())
+            {
+                Destroy(gameObject);
+            }
         }
     }
     private void OnDestroy()
@@ -47,7 +52,8 @@ public class InteractableObject : MonoBehaviour
     private bool IsCanInteract()
     {
         return isPlayerInRange && TargetPointUI.Instance.GetIsTarget() &&
-         TargetPointUI.Instance.GetInteractionGameObject() == gameObject;
+         TargetPointUI.Instance.GetInteractionGameObject() == gameObject &&
+         TargetPointUI.Instance.gameObject.activeSelf;
     }
     private void SetOriginalObjectHP(int damage)
     {
