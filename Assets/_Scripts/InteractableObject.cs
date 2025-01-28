@@ -26,6 +26,9 @@ public class InteractableObject : MonoBehaviour
             SetOriginalObjectHP(Player.Instance.GetDamage());
             int amount = GetAmountItemProvided();
             InventorySystem.Instance.AddToInventory(this, amount);
+            AlertUI.Instance.Alert(
+                $"Gain x{amount} {originalObjectSO.inventoryItemSO.itemName}"
+            );
 
             if (IsWhenDestroy())
             {
@@ -97,6 +100,10 @@ public class InteractableObject : MonoBehaviour
     public bool GetIsPlayerInRange()
     {
         return isPlayerInRange;
+    }
+    public bool IsCanPickedUp()
+    {
+        return originalObjectSO.canPickedUp;
     }
 
 

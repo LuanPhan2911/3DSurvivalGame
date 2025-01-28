@@ -89,6 +89,7 @@ public class CraftingItemCompletedUI : BaseUI
                 amountCraft = minAmountCraft;
                 sliderUI.ResetSlider();
                 hideButton.transform.position = hideButtonOldPosition;
+                closeButton.enabled = true;
                 break;
 
             case CraftingSystem.State.Confirm:
@@ -113,6 +114,7 @@ public class CraftingItemCompletedUI : BaseUI
                 confirmButton.gameObject.SetActive(false);
                 hideButton.gameObject.SetActive(false);
                 cancelButton.gameObject.SetActive(true);
+                closeButton.enabled = false;
                 break;
 
             case CraftingSystem.State.Completed:
@@ -123,6 +125,7 @@ public class CraftingItemCompletedUI : BaseUI
                 confirmButton.gameObject.SetActive(false);
                 cancelButton.gameObject.SetActive(false);
                 hideButton.gameObject.SetActive(true);
+                closeButton.enabled = true;
 
                 //update hide button position to cancel button position
                 hideButton.transform.position = cancelButton.transform.position;
@@ -139,7 +142,7 @@ public class CraftingItemCompletedUI : BaseUI
                 hideButton.gameObject.SetActive(true);
                 //update hide button position to cancel button position
                 hideButton.transform.position = cancelButton.transform.position;
-
+                closeButton.enabled = true;
                 break;
 
             default:

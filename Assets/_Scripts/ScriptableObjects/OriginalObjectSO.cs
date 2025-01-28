@@ -9,6 +9,7 @@ public class OriginalObjectSO : BaseScriptableObject
     public InventoryItemSO inventoryItemSO;
     public int maxHP;
     public int maxAmountItemProvided;
+    public bool canPickedUp = false;
 
 
 }
