@@ -10,6 +10,9 @@ public class InventoryItemImage : MonoBehaviour
     [SerializeField] private TextMeshProUGUI amountText;
 
 
+    [SerializeField] private Image backgroundImage;
+
+
     public void SetCraftItem(Sprite sprite, int amount)
     {
 
@@ -23,5 +26,9 @@ public class InventoryItemImage : MonoBehaviour
     public void Hide()
     {
         gameObject.SetActive(false);
+    }
+    public void SetBackgroundColor(int colorIndex)
+    {
+        backgroundImage.color = InventorySystem.Instance.backgroundColorArray[colorIndex];
     }
 }

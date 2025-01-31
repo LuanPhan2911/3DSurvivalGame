@@ -98,6 +98,14 @@ public class GameInput : MonoBehaviour
     {
         return UIInputActionDict[UIActionEnum.Inventory].IsPressed();
     }
+    public void DisableJump()
+    {
+        playerInputActionDict[PlayerActionEnum.Jump].Disable();
+    }
+    public void EnableJump()
+    {
+        playerInputActionDict[PlayerActionEnum.Jump].Enable();
+    }
 
 
 

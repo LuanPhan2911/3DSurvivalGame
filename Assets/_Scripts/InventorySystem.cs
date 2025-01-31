@@ -8,6 +8,7 @@ public class InventorySystem : MonoBehaviour
 
     [SerializeField] private InventorySlotContainer inventorySlotContainer;
     [SerializeField] private Transform inventorySlotItemTransformPrefab;
+    [SerializeField] public Color[] backgroundColorArray;
 
     private List<InventorySlotItem> inventorySlotItemList;
 
@@ -18,6 +19,14 @@ public class InventorySystem : MonoBehaviour
         public InventoryItemSO inventoryItemSO;
     }
     public event EventHandler<OnInventoryItemChangedEventArgs> OnInventoryItemChanged;
+
+    public enum ItemColor
+    {
+        Purple,
+        Yellow,
+        Blue,
+        White,
+    }
 
 
     private void Awake()
@@ -56,34 +65,34 @@ public class InventorySystem : MonoBehaviour
         return count;
     }
 
-    private void InstantiateInventorySlotItem(InventorySlotSingle inventorySlotSingle, InventoryItemSO inventoryItemSO, int amount)
+    private void InstantiateInventorySlotItem(InventorySlotSingle inventorySlotSingle, InventoryItemSO inventoryItemSO, int amount, ItemColor itemColor)
     {
         Transform inventorySlotItemTransform = Instantiate(inventorySlotItemTransformPrefab, inventorySlotSingle.transform);
 
         InventorySlotItem inventorySlotItem = inventorySlotItemTransform.GetComponent<InventorySlotItem>();
         inventorySlotItem.SetInventoryItemAdded(
-            inventoryItemSO, inventorySlotSingle, amount);
+            inventoryItemSO, inventorySlotSingle, amount, itemColor);
 
         inventorySlotItemList.Add(inventorySlotItem);
 
     }
 
-    private void TryAddToInventory(InventoryItemSO inventoryItemSO, int amount)
+    private void TryAddToInventory(InventoryItemSO inventoryItemSO, int amount, ItemColor itemColor)
     {
-        if (inventorySlotContainer.TryGetAvailableSlot(inventoryItemSO, out InventorySlotSingle availableInventorySlot))
+        if (inventorySlotContainer.TryGetAvailableSlot(inventoryItemSO, itemColor, out InventorySlotSingle availableInventorySlot))
         {
 
-            if (availableInventorySlot.GetRemainAvailableSlot(inventoryItemSO) == inventoryItemSO.maxAmountInSlot)
+            if (availableInventorySlot.GetRemainAvailableSlot(inventoryItemSO, itemColor) == inventoryItemSO.maxAmountInSlot)
             {
 
-                InstantiateInventorySlotItem(availableInventorySlot, inventoryItemSO, amount);
+                InstantiateInventorySlotItem(availableInventorySlot, inventoryItemSO, amount, itemColor);
 
                 OnInventoryItemChanged?.Invoke(this, new OnInventoryItemChangedEventArgs
                 {
                     inventoryItemSO = inventoryItemSO
                 });
             }
-            else if (amount <= availableInventorySlot.GetRemainAvailableSlot(inventoryItemSO))
+            else if (amount <= availableInventorySlot.GetRemainAvailableSlot(inventoryItemSO, itemColor))
             {
 
                 // slot can contain more item
@@ -96,13 +105,13 @@ public class InventorySystem : MonoBehaviour
             else
             {
                 //slot can contain more item but not enough
-                int maxAmountAdded = availableInventorySlot.GetRemainAvailableSlot(inventoryItemSO);
+                int maxAmountAdded = availableInventorySlot.GetRemainAvailableSlot(inventoryItemSO, itemColor);
                 int remainAmount = amount - maxAmountAdded;
                 availableInventorySlot.InventorySlotItem.AddAmountInSlot(maxAmountAdded);
                 // try get new available slot
-                if (inventorySlotContainer.TryGetAvailableSlot(inventoryItemSO, out InventorySlotSingle newAvailableInventorySlot))
+                if (inventorySlotContainer.TryGetAvailableSlot(inventoryItemSO, itemColor, out InventorySlotSingle newAvailableInventorySlot))
                 {
-                    InstantiateInventorySlotItem(newAvailableInventorySlot, inventoryItemSO, remainAmount);
+                    InstantiateInventorySlotItem(newAvailableInventorySlot, inventoryItemSO, remainAmount, itemColor);
                 }
                 else
                 {
@@ -124,10 +133,7 @@ public class InventorySystem : MonoBehaviour
 
     }
 
-    private void TryAddToInventory(InteractableObject interactableObject, int amount)
-    {
-        TryAddToInventory(interactableObject.GetInventoryItemSO(), amount);
-    }
+
 
     public void AddToInventory(InteractableObject interactableObject, int amount)
     {
@@ -139,14 +145,14 @@ public class InventorySystem : MonoBehaviour
             int amountToAdd = Math.Min(amount, maxAmountAdded);
 
             // Gọi hàm TryAddToInventory với số lượng tính toán được
-            TryAddToInventory(interactableObject, amountToAdd);
+            TryAddToInventory(interactableObject.GetInventoryItemSO(), amount, ItemColor.White);
 
             // Giảm số lượng cần thêm còn lại
             amount -= amountToAdd;
         }
 
     }
-    public void AddToInventory(InventoryItemSO inventoryItemSO, int amount)
+    public void AddToInventory(InventoryItemSO inventoryItemSO, int amount, ItemColor itemColor)
     {
         int maxAmountAdded = inventoryItemSO.maxAmountInSlot;
 
@@ -156,7 +162,7 @@ public class InventorySystem : MonoBehaviour
             int amountToAdd = Math.Min(amount, maxAmountAdded);
 
             // Gọi hàm TryAddToInventory với số lượng tính toán được
-            TryAddToInventory(inventoryItemSO, amountToAdd);
+            TryAddToInventory(inventoryItemSO, amountToAdd, itemColor);
 
             // Giảm số lượng cần thêm còn lại
             amount -= amountToAdd;

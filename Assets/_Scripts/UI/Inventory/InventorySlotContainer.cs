@@ -14,12 +14,12 @@ public class InventorySlotContainer : MonoBehaviour
         return inventorySlotList;
     }
 
-    public bool TryGetAvailableSlot(InventoryItemSO inventoryItemSO, out InventorySlotSingle availableInventorySlot)
+    public bool TryGetAvailableSlot(InventoryItemSO inventoryItemSO, InventorySystem.ItemColor itemColor, out InventorySlotSingle availableInventorySlot)
     {
 
         foreach (InventorySlotSingle inventorySlot in inventorySlotList)
         {
-            if (inventorySlot.IsAvailable(inventoryItemSO))
+            if (inventorySlot.IsAvailable(inventoryItemSO, itemColor))
             {
                 availableInventorySlot = inventorySlot;
                 return true;

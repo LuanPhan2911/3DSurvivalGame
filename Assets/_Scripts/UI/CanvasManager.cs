@@ -37,15 +37,18 @@ public class CanvasManager : MonoBehaviour
     private void CheckUIOpenToSetLookAround()
     {
         UpdateIsOpenUI();
-        if (!isUIOpen)
-        {
-            targetPointUI.Show();
-            MouseMovement.Instance.EnableLookAround();
-        }
-        else
+        if (isUIOpen)
         {
             targetPointUI.Hide();
             MouseMovement.Instance.DisabledLookAround();
+            GameInput.Instance.DisableJump();
+
+        }
+        else
+        {
+            targetPointUI.Show();
+            MouseMovement.Instance.EnableLookAround();
+            GameInput.Instance.EnableJump();
         }
     }
     private void UpdateIsOpenUI()

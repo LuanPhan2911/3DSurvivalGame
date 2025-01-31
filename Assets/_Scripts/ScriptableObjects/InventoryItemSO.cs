@@ -5,8 +5,11 @@ using UnityEngine;
 [CreateAssetMenu()]
 public class InventoryItemSO : BaseScriptableObject
 {
+
     public string itemName;
     public Sprite sprite;
     public int maxAmountInSlot = 1;
+
+
 
 }

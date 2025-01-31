@@ -23,13 +23,13 @@ public class InventorySlotSingle : MonoBehaviour, IDropHandler
         }
     }
 
-    public bool IsAvailable(InventoryItemSO inventoryItemSO)
+    public bool IsAvailable(InventoryItemSO inventoryItemSO, InventorySystem.ItemColor itemColor)
     {
         if (InventorySlotItem == null)
         {
             return true;
         }
-        if (InventorySlotItem.GetInventoryItemSO().Id == inventoryItemSO.Id)
+        if (InventorySlotItem.GetInventoryItemSO().Id == inventoryItemSO.Id && InventorySlotItem.GetItemColor() == itemColor)
         {
             return InventorySlotItem.GetAmountInSlot() < InventorySlotItem.GetMaxAmountInSlot();
 
@@ -41,13 +41,13 @@ public class InventorySlotSingle : MonoBehaviour, IDropHandler
 
     }
 
-    public int GetRemainAvailableSlot(InventoryItemSO inventoryItemSO)
+    public int GetRemainAvailableSlot(InventoryItemSO inventoryItemSO, InventorySystem.ItemColor itemColor)
     {
         if (InventorySlotItem == null)
         {
             return inventoryItemSO.maxAmountInSlot;
         }
-        if (InventorySlotItem.GetInventoryItemSO().Id == inventoryItemSO.Id)
+        if (InventorySlotItem.GetInventoryItemSO().Id == inventoryItemSO.Id && InventorySlotItem.GetItemColor() == itemColor)
         {
             return InventorySlotItem.GetMaxAmountInSlot() - InventorySlotItem.GetAmountInSlot();
         }

@@ -22,7 +22,6 @@ public class SliderUI : MonoBehaviour
         slider.minValue = minValue;
         slider.value = defaultValue;
         slider.wholeNumbers = isWholeNumber;
-
     }
 
     private void Start()

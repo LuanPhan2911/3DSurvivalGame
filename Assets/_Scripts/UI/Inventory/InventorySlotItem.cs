@@ -9,21 +9,29 @@ public class InventorySlotItem : MonoBehaviour
 
     [SerializeField] private Image itemImage;
     [SerializeField] private TextMeshProUGUI amountText;
-    private int amountInSlot;
+    [SerializeField] private Image backgroundImage;
+
     private InventoryItemSO inventoryItemSO;
     private InventorySlotSingle inventorySlot;
+    private int amountInSlot;
+    private InventorySystem.ItemColor itemColor;
 
 
 
     public void SetInventoryItemAdded(
-     InventoryItemSO inventoryItemSO, InventorySlotSingle inventorySlot, int amount)
+     InventoryItemSO inventoryItemSO, InventorySlotSingle inventorySlot, int amount, InventorySystem.ItemColor itemColor)
     {
 
         this.inventoryItemSO = inventoryItemSO;
         this.inventorySlot = inventorySlot;
         itemImage.sprite = inventoryItemSO.sprite;
-
         SetAmountInSlot(amount);
+        SetBackgroundColor(itemColor);
+    }
+    private void SetBackgroundColor(InventorySystem.ItemColor itemColor)
+    {
+        this.itemColor = itemColor;
+        backgroundImage.color = InventorySystem.Instance.backgroundColorArray[(int)itemColor];
     }
 
     private void SetAmountInSlot(int amount)
@@ -64,6 +72,10 @@ public class InventorySlotItem : MonoBehaviour
     public int GetAmountInSlot()
     {
         return amountInSlot;
+    }
+    public InventorySystem.ItemColor GetItemColor()
+    {
+        return itemColor;
     }
     public int GetMaxAmountInSlot()
     {
