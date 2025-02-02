@@ -81,4 +81,9 @@ public class InventorySlotItem : MonoBehaviour
     {
         return inventoryItemSO.maxAmountInSlot;
     }
+
+    public float GetInventoryItemWeight()
+    {
+        return inventoryItemSO.weight * amountInSlot;
+    }
 }

@@ -16,3 +16,4 @@ MonoBehaviour:
   itemName: Stone
   sprite: {fileID: 21300000, guid: 583675a75bcb2a941ac555b9ccd513a9, type: 3}
   maxAmountInSlot: 10
+  weight: 1

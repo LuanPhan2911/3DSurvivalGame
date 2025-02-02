@@ -84,23 +84,13 @@ public class InventorySystem : MonoBehaviour
 
             if (availableInventorySlot.GetRemainAvailableSlot(inventoryItemSO, itemColor) == inventoryItemSO.maxAmountInSlot)
             {
-
                 InstantiateInventorySlotItem(availableInventorySlot, inventoryItemSO, amount, itemColor);
 
-                OnInventoryItemChanged?.Invoke(this, new OnInventoryItemChangedEventArgs
-                {
-                    inventoryItemSO = inventoryItemSO
-                });
             }
             else if (amount <= availableInventorySlot.GetRemainAvailableSlot(inventoryItemSO, itemColor))
             {
-
                 // slot can contain more item
                 availableInventorySlot.InventorySlotItem.AddAmountInSlot(amount);
-                OnInventoryItemChanged?.Invoke(this, new OnInventoryItemChangedEventArgs
-                {
-                    inventoryItemSO = inventoryItemSO
-                });
             }
             else
             {
@@ -112,17 +102,23 @@ public class InventorySystem : MonoBehaviour
                 if (inventorySlotContainer.TryGetAvailableSlot(inventoryItemSO, itemColor, out InventorySlotSingle newAvailableInventorySlot))
                 {
                     InstantiateInventorySlotItem(newAvailableInventorySlot, inventoryItemSO, remainAmount, itemColor);
+
                 }
                 else
                 {
                     // trigger inventory full
                     Debug.Log("Inventory full");
                 }
-                OnInventoryItemChanged?.Invoke(this, new OnInventoryItemChangedEventArgs
-                {
-                    inventoryItemSO = inventoryItemSO
-                });
+
             }
+            OnInventoryItemChanged?.Invoke(this, new OnInventoryItemChangedEventArgs
+            {
+                inventoryItemSO = inventoryItemSO
+            });
+            float weight = amount * inventoryItemSO.weight;
+            PlayerStatus.Instance.SetWeight(weight);
+
+
         }
         else
         {
@@ -137,6 +133,7 @@ public class InventorySystem : MonoBehaviour
 
     public void AddToInventory(InteractableObject interactableObject, int amount)
     {
+
         int maxAmountAdded = interactableObject.GetInventoryItemSO().maxAmountInSlot;
 
         while (amount > 0)
@@ -145,7 +142,7 @@ public class InventorySystem : MonoBehaviour
             int amountToAdd = Math.Min(amount, maxAmountAdded);
 
             // Gọi hàm TryAddToInventory với số lượng tính toán được
-            TryAddToInventory(interactableObject.GetInventoryItemSO(), amount, ItemColor.White);
+            TryAddToInventory(interactableObject.GetInventoryItemSO(), amountToAdd, ItemColor.White);
 
             // Giảm số lượng cần thêm còn lại
             amount -= amountToAdd;
@@ -168,6 +165,15 @@ public class InventorySystem : MonoBehaviour
             amount -= amountToAdd;
         }
     }
+    public float GetInventoryWeight()
+    {
+        float totalWeight = 0f;
+        foreach (InventorySlotItem inventorySlotItem in inventorySlotItemList)
+        {
+            totalWeight += inventorySlotItem.GetInventoryItemWeight();
+        }
+        return totalWeight;
+    }
 
     public void RemoveItemInInventory(InventorySlotItem dropInventoryItem)
     {
@@ -181,10 +187,13 @@ public class InventorySystem : MonoBehaviour
                 {
                     inventoryItemSO = dropInventoryItem.GetInventoryItemSO()
                 });
+                float weight = inventorySlotItem.GetInventoryItemWeight();
+                PlayerStatus.Instance.SetWeight(-1 * weight);
                 Destroy(dropInventoryItem.gameObject);
                 return;
             }
         }
+
 
     }
     public void RemoveItemInInventory(InventoryItemSO inventoryItemSO, int amount)
@@ -217,10 +226,13 @@ public class InventorySystem : MonoBehaviour
                     {
                         inventoryItemSO = inventoryItemSO
                     });
+                    float weight = amount * inventorySlotItem.GetInventoryItemSO().weight;
+                    PlayerStatus.Instance.SetWeight(-1 * weight);
                     return;
                 }
             }
 
         }
+
     }
 }

@@ -16,3 +16,4 @@ MonoBehaviour:
   itemName: Pick Axe
   sprite: {fileID: 21300000, guid: b54b94da5cee5c046bf327246ac181e6, type: 3}
   maxAmountInSlot: 1
+  weight: 2

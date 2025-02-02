@@ -10,6 +10,8 @@ public class InventoryItemSO : BaseScriptableObject
     public Sprite sprite;
     public int maxAmountInSlot = 1;
 
+    public float weight;
+
 
 
 }

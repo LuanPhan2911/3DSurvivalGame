@@ -18,7 +18,8 @@ public class GameInput : MonoBehaviour
         Look,
         Jump,
         Attack,
-        Interact
+        Interact,
+        Sprint
     }
     public enum UIActionEnum
     {
@@ -93,6 +94,10 @@ public class GameInput : MonoBehaviour
     public bool IsJumpActionPressed()
     {
         return playerInputActionDict[PlayerActionEnum.Jump].IsPressed();
+    }
+    public bool IsSprintActionPressed()
+    {
+        return playerInputActionDict[PlayerActionEnum.Sprint].IsPressed();
     }
     public bool IsInventoryActionPress()
     {
