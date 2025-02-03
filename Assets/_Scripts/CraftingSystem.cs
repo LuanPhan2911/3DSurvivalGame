@@ -180,7 +180,7 @@ public class CraftingSystem : MonoBehaviour
         }
         foreach (CraftingRequiredItemSO craftingRequiredItemSO in craftingItemSO.craftingRequiredItemSOList)
         {
-            if (craftingRequiredItemSO.inventoryItemSO.Id == inventoryItemSOChange.Id)
+            if (craftingRequiredItemSO.inventoryItemSO == inventoryItemSOChange)
             {
                 return true;
             }

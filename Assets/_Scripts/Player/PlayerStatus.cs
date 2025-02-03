@@ -37,9 +37,9 @@ public class PlayerStatus : MonoBehaviour
     }
     public void ResetStatus()
     {
-        hp = maxHp;
+        hp = 50;
         stamina = maxStamina;
-        food = maxFood;
+        food = 50;
         water = maxWater;
         weight = 0f;
         hpStatusBar.SetStatusBar(hp / maxHp);
@@ -110,4 +110,5 @@ public class PlayerStatus : MonoBehaviour
     {
         return (weight / maxWeight) > 0.8f;
     }
+
 }

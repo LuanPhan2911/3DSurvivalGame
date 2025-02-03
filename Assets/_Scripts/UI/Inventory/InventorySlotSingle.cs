@@ -29,7 +29,7 @@ public class InventorySlotSingle : MonoBehaviour, IDropHandler
         {
             return true;
         }
-        if (InventorySlotItem.GetInventoryItemSO().Id == inventoryItemSO.Id && InventorySlotItem.GetItemColor() == itemColor)
+        if (InventorySlotItem.GetInventoryItemSO() == inventoryItemSO && InventorySlotItem.GetItemColor() == itemColor)
         {
             return InventorySlotItem.GetAmountInSlot() < InventorySlotItem.GetMaxAmountInSlot();
 
@@ -47,7 +47,7 @@ public class InventorySlotSingle : MonoBehaviour, IDropHandler
         {
             return inventoryItemSO.maxAmountInSlot;
         }
-        if (InventorySlotItem.GetInventoryItemSO().Id == inventoryItemSO.Id && InventorySlotItem.GetItemColor() == itemColor)
+        if (InventorySlotItem.GetInventoryItemSO() == inventoryItemSO && InventorySlotItem.GetItemColor() == itemColor)
         {
             return InventorySlotItem.GetMaxAmountInSlot() - InventorySlotItem.GetAmountInSlot();
         }

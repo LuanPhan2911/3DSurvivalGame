@@ -9,10 +9,13 @@ public class InventorySystem : MonoBehaviour
     [SerializeField] private InventorySlotContainer inventorySlotContainer;
     [SerializeField] private Transform inventorySlotItemTransformPrefab;
     [SerializeField] public Color[] backgroundColorArray;
+    [SerializeField] public InventoryItemInfoUI inventoryItemInfoUI;
 
     private List<InventorySlotItem> inventorySlotItemList;
 
     public static InventorySystem Instance { get; private set; }
+
+    private InventorySlotItem selectedInventorySlotItem;
 
     public class OnInventoryItemChangedEventArgs : EventArgs
     {
@@ -34,13 +37,30 @@ public class InventorySystem : MonoBehaviour
         Instance = this;
         inventorySlotItemList = new List<InventorySlotItem>();
     }
+    public void SetSelectedInventorySlotItem(InventorySlotItem inventorySlotItem)
+    {
+        if (selectedInventorySlotItem == inventorySlotItem)
+        {
+            selectedInventorySlotItem = null;
+        }
+        else
+        {
+            selectedInventorySlotItem?.HideSelectedGameObject();
+            selectedInventorySlotItem = inventorySlotItem;
+        }
+
+    }
+    public InventorySlotItem GetSelectedInventorySlotItem()
+    {
+        return selectedInventorySlotItem;
+    }
 
     public bool IsAvailableItem(InventoryItemSO inventoryItemSO, int amount)
     {
         int count = 0;
         foreach (InventorySlotItem inventorySlotItem in inventorySlotItemList)
         {
-            if (inventorySlotItem.GetInventoryItemSO().Id == inventoryItemSO.Id)
+            if (inventorySlotItem.GetInventoryItemSO() == inventoryItemSO)
             {
                 count += inventorySlotItem.GetAmountInSlot();
                 if (count >= amount)
@@ -57,7 +77,7 @@ public class InventorySystem : MonoBehaviour
         int count = 0;
         foreach (InventorySlotItem inventorySlotItem in inventorySlotItemList)
         {
-            if (inventorySlotItem.GetInventoryItemSO().Id == inventoryItemSO.Id)
+            if (inventorySlotItem.GetInventoryItemSO() == inventoryItemSO)
             {
                 count += inventorySlotItem.GetAmountInSlot();
             }
@@ -189,8 +209,64 @@ public class InventorySystem : MonoBehaviour
                 });
                 float weight = inventorySlotItem.GetInventoryItemWeight();
                 PlayerStatus.Instance.SetWeight(-1 * weight);
+                if (selectedInventorySlotItem == dropInventoryItem)
+                {
+                    SetSelectedInventorySlotItem(null);
+                }
+
                 Destroy(dropInventoryItem.gameObject);
                 return;
+            }
+        }
+
+
+    }
+    public void RemoveItemInInventory(InventorySlotItem dropInventoryItem, int amount, Action OnComplete = null)
+    {
+
+        int count = 0;
+        foreach (InventorySlotItem inventorySlotItem in inventorySlotItemList)
+        {
+            if (inventorySlotItem == dropInventoryItem)
+            {
+
+                if (amount >= inventorySlotItem.GetAmountInSlot())
+                {
+                    inventorySlotItemList.Remove(inventorySlotItem);
+                    count += inventorySlotItem.GetAmountInSlot();
+                    inventorySlotItem.SubAllAmountInSlot();
+                    if (selectedInventorySlotItem == dropInventoryItem)
+                    {
+                        SetSelectedInventorySlotItem(null);
+                    }
+                    Destroy(inventorySlotItem.gameObject);
+                }
+                else
+                {
+                    count += amount;
+                    inventorySlotItem.SubAmountInSlot(amount);
+                }
+
+                if (count >= amount)
+                {
+
+                    // remove enough;
+
+                    OnInventoryItemChanged?.Invoke(this, new OnInventoryItemChangedEventArgs
+                    {
+                        inventoryItemSO = inventorySlotItem.GetInventoryItemSO()
+                    });
+
+                    float weight = amount * inventorySlotItem.GetInventoryItemSO().weight;
+                    PlayerStatus.Instance.SetWeight(-1 * weight);
+                    if (inventorySlotItem.GetAmountInSlot() == 0)
+                    {
+                        OnComplete?.Invoke();
+
+                    }
+
+                    return;
+                }
             }
         }
 
@@ -203,7 +279,7 @@ public class InventorySystem : MonoBehaviour
         for (int i = inventorySlotItemList.Count - 1; i > 0; i--)
         {
             InventorySlotItem inventorySlotItem = inventorySlotItemList[i];
-            if (inventorySlotItem.GetInventoryItemSO().Id == inventoryItemSO.Id)
+            if (inventorySlotItem.GetInventoryItemSO() == inventoryItemSO)
             {
 
                 if (amount >= inventorySlotItem.GetAmountInSlot())
@@ -211,23 +287,27 @@ public class InventorySystem : MonoBehaviour
                     inventorySlotItemList.RemoveAt(i);
                     Destroy(inventorySlotItem.gameObject);
                     count += inventorySlotItem.GetAmountInSlot();
+                    inventorySlotItem.SubAllAmountInSlot();
                 }
                 else
                 {
-                    inventorySlotItem.SubAmountInSlot(amount);
                     count += amount;
+                    inventorySlotItem.SubAmountInSlot(amount);
                 }
 
                 if (count >= amount)
                 {
+
                     // remove enough;
 
                     OnInventoryItemChanged?.Invoke(this, new OnInventoryItemChangedEventArgs
                     {
                         inventoryItemSO = inventoryItemSO
                     });
-                    float weight = amount * inventorySlotItem.GetInventoryItemSO().weight;
+
+                    float weight = amount * inventoryItemSO.weight;
                     PlayerStatus.Instance.SetWeight(-1 * weight);
+
                     return;
                 }
             }

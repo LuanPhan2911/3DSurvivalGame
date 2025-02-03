@@ -2,14 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventorySlotItem : MonoBehaviour
+public class InventorySlotItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
 
     [SerializeField] private Image itemImage;
     [SerializeField] private TextMeshProUGUI amountText;
     [SerializeField] private Image backgroundImage;
+    [SerializeField] private GameObject selectedGameObject;
+
 
     private InventoryItemSO inventoryItemSO;
     private InventorySlotSingle inventorySlot;
@@ -17,7 +20,10 @@ public class InventorySlotItem : MonoBehaviour
     private InventorySystem.ItemColor itemColor;
 
 
-
+    private void Start()
+    {
+        selectedGameObject.SetActive(false);
+    }
     public void SetInventoryItemAdded(
      InventoryItemSO inventoryItemSO, InventorySlotSingle inventorySlot, int amount, InventorySystem.ItemColor itemColor)
     {
@@ -47,6 +53,11 @@ public class InventorySlotItem : MonoBehaviour
     public void SubAmountInSlot(int amount)
     {
         amountInSlot -= amount;
+        SetAmountText(amountInSlot);
+    }
+    public void SubAllAmountInSlot()
+    {
+        amountInSlot = 0;
         SetAmountText(amountInSlot);
     }
     private void SetAmountText(int amount)
@@ -85,5 +96,71 @@ public class InventorySlotItem : MonoBehaviour
     public float GetInventoryItemWeight()
     {
         return inventoryItemSO.weight * amountInSlot;
+    }
+
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            // left click
+            InventorySystem.Instance.SetSelectedInventorySlotItem(this);
+            InventorySystem.Instance.inventoryItemInfoUI.SetInventoryItemInfo(this);
+        }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        selectedGameObject.SetActive(true);
+        InventorySlotItem selectedSlotItem = InventorySystem.Instance.GetSelectedInventorySlotItem();
+        if (!selectedSlotItem)
+        {
+            InventorySystem.Instance.inventoryItemInfoUI.SetInventoryItemInfo(this);
+        }
+
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        InventorySlotItem selectedSlotItem = InventorySystem.Instance.GetSelectedInventorySlotItem();
+
+        if (!selectedSlotItem)
+        {
+            selectedGameObject.SetActive(false);
+            InventorySystem.Instance.inventoryItemInfoUI.Hide();
+        }
+        else
+        {
+            if (selectedSlotItem != this)
+            {
+                selectedGameObject.SetActive(false);
+            }
+        }
+
+
+    }
+    public void HideSelectedGameObject()
+    {
+        selectedGameObject.SetActive(false);
+    }
+
+    public void ConsumeItem()
+    {
+        if (!inventoryItemSO.isConsumable)
+        {
+            Debug.Log("Inventory item cannot consume");
+            return;
+        }
+        PlayerStatus.Instance.SetHp(inventoryItemSO.hpProvide);
+        PlayerStatus.Instance.SetFood(inventoryItemSO.foodProvide);
+        PlayerStatus.Instance.SetWater(inventoryItemSO.waterProvide);
+
+
+        InventorySystem.Instance.RemoveItemInInventory(this, 1, () =>
+        {
+            InventorySystem.Instance.inventoryItemInfoUI.Hide();
+        });
+
     }
 }

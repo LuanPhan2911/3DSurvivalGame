@@ -31,4 +31,9 @@ public class InventoryItemImage : MonoBehaviour
     {
         backgroundImage.color = InventorySystem.Instance.backgroundColorArray[colorIndex];
     }
+    public void SetInventoryItem(Sprite sprite, int amount, int colorIndex)
+    {
+        SetBackgroundColor(colorIndex);
+        SetCraftItem(sprite, amount);
+    }
 }

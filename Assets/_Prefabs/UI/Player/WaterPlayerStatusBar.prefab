@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2197450202226772947, guid: e2adff9402876cd4b861759dae41c419, type: 3}
       propertyPath: m_Name
-      value: WeightPlayerStatusBar
+      value: WaterPlayerStatusBar
       objectReference: {fileID: 0}
     - target: {fileID: 6132354172122814871, guid: e2adff9402876cd4b861759dae41c419, type: 3}
       propertyPath: defaultSprite
@@ -42,11 +42,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7343115347087530551, guid: e2adff9402876cd4b861759dae41c419, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 150
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7343115347087530551, guid: e2adff9402876cd4b861759dae41c419, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 150
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7343115347087530551, guid: e2adff9402876cd4b861759dae41c419, type: 3}
       propertyPath: m_LocalPosition.x

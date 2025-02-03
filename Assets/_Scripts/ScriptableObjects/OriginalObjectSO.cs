@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu()]
-public class OriginalObjectSO : BaseScriptableObject
+public class OriginalObjectSO : ScriptableObject
 {
     public string objectName;
     public InventoryItemSO inventoryItemSO;

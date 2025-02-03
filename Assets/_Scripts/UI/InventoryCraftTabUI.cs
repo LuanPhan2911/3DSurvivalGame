@@ -37,6 +37,10 @@ public class InventoryCraftTabUI : BaseUI
         {
             craftingItemUI.Hide();
         }
+
+        InventorySystem.Instance.SetSelectedInventorySlotItem(null);
+        InventorySystem.Instance.inventoryItemInfoUI.Hide();
+
         base.Hide();
     }
 
