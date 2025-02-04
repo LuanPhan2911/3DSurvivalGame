@@ -27,7 +27,7 @@ public class CraftingItemButtonSingle : MonoBehaviour
         button.onClick.AddListener(() =>
         {
             craftingItemUI.SetCraftingItemSO(craftingItemSO);
-            craftingItemUI.Show();
+
         });
         HideSelectedGameObject();
     }

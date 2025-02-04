@@ -11,12 +11,19 @@ public class PlayerMovement : MonoBehaviour
     private float defaultSpeed;
     [SerializeField] private float sprintSpeed = 16f;
     [SerializeField] private float overweightSpeed = 2f;
+    [SerializeField] private float midOverWeightSpeed = 4f;
     [SerializeField] private float gravity = -9.81f * 2;
     [SerializeField] private float jumpHeight = 3f;
+    [SerializeField] private float jumHeightWhenMidOverweight = 1.5f;
 
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundDistance = 0.4f;
     [SerializeField] private LayerMask groundMask;
+
+    [SerializeField] private float staminaConsumeWhenMidOverweight = -20f;
+    [SerializeField] private float staminaConsume = -10f;
+    [SerializeField] private float staminaRestoreWhenWalking = 5f;
+    [SerializeField] private float staminaRestore = 10f;
 
     private Vector3 velocity;
 
@@ -51,11 +58,11 @@ public class PlayerMovement : MonoBehaviour
             }
             if (isWalking)
             {
-                PlayerStatus.Instance.SetStamina(5f);
+                PlayerStatus.Instance.SetStamina(staminaRestoreWhenWalking);
             }
             else
             {
-                PlayerStatus.Instance.SetStamina(10f);
+                PlayerStatus.Instance.SetStamina(staminaRestore);
             }
         }
 
@@ -70,9 +77,13 @@ public class PlayerMovement : MonoBehaviour
     }
     private void HandleOverweight()
     {
-        if (PlayerStatus.Instance.IsOverWeight())
+        if (PlayerStatus.Instance.IsOverweight())
         {
             speed = overweightSpeed;
+        }
+        else if (PlayerStatus.Instance.IsMidOverweight())
+        {
+            speed = midOverWeightSpeed;
         }
         else
         {
@@ -81,7 +92,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void HandleSprint()
     {
-        if (PlayerStatus.Instance.IsOverWeight())
+        if (PlayerStatus.Instance.IsOverweight())
         {
             return;
         }
@@ -90,9 +101,16 @@ public class PlayerMovement : MonoBehaviour
             if (isWalking && PlayerStatus.Instance.CanSprint())
             {
                 delayRestoreStaminaTimer = delayRestoreStaminaTimerMax;
-
                 speed = sprintSpeed;
-                PlayerStatus.Instance.SetStamina(-10 * Time.deltaTime);
+                if (PlayerStatus.Instance.IsMidOverweight())
+                {
+                    PlayerStatus.Instance.SetStamina(staminaConsumeWhenMidOverweight * Time.deltaTime);
+                }
+                else
+                {
+                    PlayerStatus.Instance.SetStamina(staminaConsume * Time.deltaTime);
+                }
+
                 isSprinting = true;
                 isWalking = false;
             }
@@ -134,15 +152,28 @@ public class PlayerMovement : MonoBehaviour
         controller.Move(move * speed * Time.deltaTime);
 
         //check if the player is on the ground so he can jump
-        if (GameInput.Instance.IsJumpActionPressed() && isGrounded)
+        if (IsPlayerCanJump())
         {
             //the equation for jumping
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            if (PlayerStatus.Instance.IsMidOverweight())
+            {
+                velocity.y = Mathf.Sqrt(jumHeightWhenMidOverweight * -2f * gravity);
+            }
+            else
+            {
+                velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            }
+
         }
 
         velocity.y += gravity * Time.deltaTime;
 
         controller.Move(velocity * Time.deltaTime);
+    }
+    private bool IsPlayerCanJump()
+    {
+        return GameInput.Instance.IsJumpActionPressed() && isGrounded &&
+        !PlayerStatus.Instance.IsOverweight();
     }
 
     public bool GetIsSprinting()

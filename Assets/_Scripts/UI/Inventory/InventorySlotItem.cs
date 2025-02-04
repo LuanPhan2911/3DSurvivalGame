@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -12,6 +13,7 @@ public class InventorySlotItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
     [SerializeField] private TextMeshProUGUI amountText;
     [SerializeField] private Image backgroundImage;
     [SerializeField] private GameObject selectedGameObject;
+    [SerializeField] private DragDrop dragDrop;
 
 
     private InventoryItemSO inventoryItemSO;
@@ -20,9 +22,21 @@ public class InventorySlotItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
     private InventorySystem.ItemColor itemColor;
 
 
+
     private void Start()
     {
         selectedGameObject.SetActive(false);
+        dragDrop.OnDragStart += DragDrop_OnItemDragStart;
+    }
+    private void OnDestroy()
+    {
+        dragDrop.OnDragStart -= DragDrop_OnItemDragStart;
+    }
+
+
+    private void DragDrop_OnItemDragStart(object sender, EventArgs args)
+    {
+        InventorySystem.Instance.SetSelectedInventorySlotItem(null);
     }
     public void SetInventoryItemAdded(
      InventoryItemSO inventoryItemSO, InventorySlotSingle inventorySlot, int amount, InventorySystem.ItemColor itemColor)
@@ -101,6 +115,15 @@ public class InventorySlotItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        InventorySlotSingle inventorySlotSingle = GetComponentInParent<InventorySlotSingle>();
+        if (inventorySlotSingle.IsQuickSlot())
+        {
+            if (eventData.button == PointerEventData.InputButton.Right)
+            {
+                InventorySystem.Instance.SetItemFromQuickSlotToEmptyInventorySlot(this);
+            }
+            return;
+        }
 
         if (eventData.button == PointerEventData.InputButton.Left)
         {
@@ -108,10 +131,27 @@ public class InventorySlotItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
             InventorySystem.Instance.SetSelectedInventorySlotItem(this);
             InventorySystem.Instance.inventoryItemInfoUI.SetInventoryItemInfo(this);
         }
+        else if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            // right click
+
+            //consume or equipment item
+            ConsumeItem();
+            if (!inventoryItemSO.isConsumable)
+            {
+                InventorySystem.Instance.SetEquippableItemToEmptyQuickSlot(this);
+            }
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        InventorySlotSingle inventorySlotSingle = GetComponentInParent<InventorySlotSingle>();
+        if (inventorySlotSingle.IsQuickSlot())
+        {
+            return;
+        }
+
         selectedGameObject.SetActive(true);
         InventorySlotItem selectedSlotItem = InventorySystem.Instance.GetSelectedInventorySlotItem();
         if (!selectedSlotItem)
@@ -162,5 +202,15 @@ public class InventorySlotItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
             InventorySystem.Instance.inventoryItemInfoUI.Hide();
         });
 
+    }
+    public void SetInventorySlot(InventorySlotSingle inventorySlot)
+    {
+        this.inventorySlot = inventorySlot;
+    }
+    public void SetInventorySlotParent(InventorySlotSingle inventorySlot)
+    {
+        this.inventorySlot = inventorySlot;
+        transform.SetParent(inventorySlot.transform);
+        transform.localPosition = Vector3.zero;
     }
 }

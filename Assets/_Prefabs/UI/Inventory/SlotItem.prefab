@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 38.599976, y: -28.900024}
+  m_AnchoredPosition: {x: 39.7, y: -27}
   m_SizeDelta: {x: -84, y: -84}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6486208770776984418
@@ -443,3 +443,4 @@ MonoBehaviour:
   amountText: {fileID: 7573045230706588597}
   backgroundImage: {fileID: 4336885895557556667}
   selectedGameObject: {fileID: 7057979537966729288}
+  dragDrop: {fileID: 4451051678125715563}

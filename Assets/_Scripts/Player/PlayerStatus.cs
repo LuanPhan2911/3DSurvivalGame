@@ -106,9 +106,13 @@ public class PlayerStatus : MonoBehaviour
     {
         return stamina == maxStamina;
     }
-    public bool IsOverWeight()
+    public bool IsOverweight()
     {
-        return (weight / maxWeight) > 0.8f;
+        return (weight / maxWeight) >= 0.8f;
+    }
+    public bool IsMidOverweight()
+    {
+        return (weight / maxWeight) >= 0.5f;
     }
 
 }

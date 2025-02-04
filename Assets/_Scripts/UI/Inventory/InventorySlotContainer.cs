@@ -36,5 +36,17 @@ public class InventorySlotContainer : MonoBehaviour
         return isInventoryFull;
     }
 
+    public InventorySlotSingle GetEmptyInventorySlot()
+    {
+        foreach (InventorySlotSingle inventorySlot in inventorySlotList)
+        {
+            if (!inventorySlot.InventorySlotItem)
+            {
+                return inventorySlot;
+            }
+        }
+        return null;
+    }
+
 
 }

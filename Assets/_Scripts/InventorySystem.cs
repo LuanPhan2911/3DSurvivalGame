@@ -7,6 +7,7 @@ public class InventorySystem : MonoBehaviour
 {
 
     [SerializeField] private InventorySlotContainer inventorySlotContainer;
+    [SerializeField] private QuickSlotContainer quickSlotContainer;
     [SerializeField] private Transform inventorySlotItemTransformPrefab;
     [SerializeField] public Color[] backgroundColorArray;
     [SerializeField] public InventoryItemInfoUI inventoryItemInfoUI;
@@ -16,6 +17,7 @@ public class InventorySystem : MonoBehaviour
     public static InventorySystem Instance { get; private set; }
 
     private InventorySlotItem selectedInventorySlotItem;
+    private InventorySlotSingle selectedQuickSlot;
 
     public class OnInventoryItemChangedEventArgs : EventArgs
     {
@@ -50,6 +52,30 @@ public class InventorySystem : MonoBehaviour
         }
 
     }
+    public void SetSelectedQuickSlot(InventorySlotSingle inventorySlotSingle)
+    {
+        if (selectedQuickSlot == inventorySlotSingle)
+        {
+            selectedQuickSlot.GetComponentInChildren<QuickSlotNumber>().SetUnselected();
+            selectedQuickSlot = null;
+        }
+        else
+        {
+            if (selectedQuickSlot)
+            {
+                selectedQuickSlot.GetComponentInChildren<QuickSlotNumber>().SetUnselected();
+            }
+            selectedQuickSlot = inventorySlotSingle;
+
+            selectedQuickSlot.GetComponentInChildren<QuickSlotNumber>().SetSelected();
+
+
+        }
+    }
+    public InventorySlotSingle GetSelectedQuickSlot()
+    {
+        return selectedQuickSlot;
+    }
     public InventorySlotItem GetSelectedInventorySlotItem()
     {
         return selectedInventorySlotItem;
@@ -71,6 +97,37 @@ public class InventorySystem : MonoBehaviour
 
         }
         return false;
+    }
+
+    public void SetEquippableItemToEmptyQuickSlot(InventorySlotItem inventorySlotItem)
+    {
+        if (!inventorySlotItem.GetInventoryItemSO().isEquippable)
+        {
+            return;
+        }
+        InventorySlotSingle emptyQuickSlot = quickSlotContainer.GetEmptyQuickSlot();
+        if (!emptyQuickSlot)
+        {
+            return;
+        }
+        SetSelectedInventorySlotItem(null);
+        inventorySlotItem.SetInventorySlotParent(emptyQuickSlot);
+    }
+    public void SetItemFromQuickSlotToEmptyInventorySlot(InventorySlotItem quickSlotItem)
+    {
+        InventorySlotSingle emptyInventorySlot = inventorySlotContainer.GetEmptyInventorySlot();
+        if (!emptyInventorySlot)
+        {
+            return;
+        }
+        if (selectedQuickSlot == quickSlotItem.GetInventorySlot())
+        {
+            SetSelectedQuickSlot(null);
+        }
+        quickSlotItem.SetInventorySlotParent(emptyInventorySlot);
+
+
+
     }
     public int GetQuantityOfInventoryItem(InventoryItemSO inventoryItemSO)
     {

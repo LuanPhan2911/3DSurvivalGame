@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 public class InventorySlotSingle : MonoBehaviour, IDropHandler
 {
 
+    [SerializeField] private bool isQuickSlot = false;
     public InventorySlotItem InventorySlotItem
     {
         get
@@ -14,14 +15,14 @@ public class InventorySlotSingle : MonoBehaviour, IDropHandler
             {
                 return null;
             }
-            if (transform.GetChild(0).TryGetComponent(out InventorySlotItem inventorySlotItem))
-            {
-                return inventorySlotItem;
-            }
-
-            return null;
+            InventorySlotItem inventorySlotItem = transform.GetComponentInChildren<InventorySlotItem>();
+            return inventorySlotItem;
         }
     }
+
+
+
+
 
     public bool IsAvailable(InventoryItemSO inventoryItemSO, InventorySystem.ItemColor itemColor)
     {
@@ -58,20 +59,56 @@ public class InventorySlotSingle : MonoBehaviour, IDropHandler
     }
     public void OnDrop(PointerEventData eventData)
     {
-
+        if (!DragDrop.itemBeingDragged.TryGetComponent(out InventorySlotItem dragInventorySlotItem))
+        {
+            return;
+        }
 
         //if there is not item already then set our item.
         if (!InventorySlotItem)
         {
+            if (!isQuickSlot)
+            {
+                dragInventorySlotItem.SetInventorySlotParent(this);
 
-            DragDrop.itemBeingDragged.transform.SetParent(transform);
-            DragDrop.itemBeingDragged.transform.localPosition = new Vector2(0, 0);
+            }
+            else
+            {
+                if (dragInventorySlotItem.GetInventoryItemSO().isEquippable)
+                {
+                    dragInventorySlotItem.SetInventorySlotParent(this);
+                }
+            }
+        }
+        else
+        {
+            // swap item if 2 item also equippable item
+            if (InventorySlotItem.GetInventoryItemSO().isEquippable &&
+            dragInventorySlotItem.GetInventoryItemSO().isEquippable)
+            {
+                InventorySlotSingle dragSlot = dragInventorySlotItem.GetInventorySlot();
+                InventorySlotItem inventorySlotItem = InventorySlotItem;
 
+                dragInventorySlotItem.SetInventorySlotParent(this);
+                inventorySlotItem.SetInventorySlotParent(dragSlot);
+
+            }
         }
 
-
-
     }
+    public int GetSlotIndex()
+    {
+        if (!isQuickSlot)
+        {
+            return -1;
+        }
+        return GetComponent<QuickSlotNumber>().GetNumberIndex();
+    }
+    public bool IsQuickSlot()
+    {
+        return isQuickSlot;
+    }
+
 
 
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 public class GameInput : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public class GameInput : MonoBehaviour
     public enum UIActionEnum
     {
         Inventory,
+        QuickSlot
     }
 
     public Dictionary<PlayerActionEnum, InputAction> playerInputActionDict;
@@ -33,6 +35,12 @@ public class GameInput : MonoBehaviour
 
     public EventHandler OnAttackAction;
     public EventHandler OnInteractAction;
+
+    public class OnQuickSlotActionEventArgs : EventArgs
+    {
+        public int slotIndex;
+    }
+    public event EventHandler<OnQuickSlotActionEventArgs> OnQuickSlotAction;
 
 
 
@@ -57,6 +65,7 @@ public class GameInput : MonoBehaviour
         playerInputActionDict[PlayerActionEnum.Attack].performed += AttackAction;
 
         UIInputActionDict[UIActionEnum.Inventory].performed += InventoryUIAction;
+        UIInputActionDict[UIActionEnum.QuickSlot].performed += QuickSlotUIAction;
 
 
 
@@ -66,11 +75,23 @@ public class GameInput : MonoBehaviour
         playerInputActionDict[PlayerActionEnum.Attack].performed -= AttackAction;
 
         UIInputActionDict[UIActionEnum.Inventory].performed -= InventoryUIAction;
+        UIInputActionDict[UIActionEnum.QuickSlot].performed -= QuickSlotUIAction;
     }
 
     private void InventoryUIAction(InputAction.CallbackContext callback)
     {
         OnOpenInventoryAction?.Invoke(this, EventArgs.Empty);
+    }
+    private void QuickSlotUIAction(InputAction.CallbackContext callback)
+    {
+        string keyname = callback.control.name;
+        if (int.TryParse(keyname, out int slotIndex))
+        {
+            OnQuickSlotAction?.Invoke(this, new OnQuickSlotActionEventArgs
+            {
+                slotIndex = slotIndex
+            });
+        }
     }
     private void AttackAction(InputAction.CallbackContext callback)
     {
@@ -111,6 +132,17 @@ public class GameInput : MonoBehaviour
     {
         playerInputActionDict[PlayerActionEnum.Jump].Enable();
     }
+    public void DisableAttack()
+    {
+        playerInputActionDict[PlayerActionEnum.Attack].Disable();
+    }
+    public void EnableAttack()
+    {
+        playerInputActionDict[PlayerActionEnum.Attack].Enable();
+    }
+
+
+
 
 
 

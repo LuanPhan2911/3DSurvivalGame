@@ -25,7 +25,7 @@ public class InventoryItemInfoUI : MonoBehaviour
                 message, () =>
                 {
                     InventorySystem.Instance.RemoveItemInInventory(inventorySlotItem);
-                    Hide();
+
                 }
             );
         });
@@ -33,11 +33,15 @@ public class InventoryItemInfoUI : MonoBehaviour
         {
             InventoryItemSO inventoryItemSO = inventorySlotItem.GetInventoryItemSO();
             // can consumable
-            if (inventoryItemSO.isConsumable)
-            {
-                inventorySlotItem.ConsumeItem();
-            }
+
+            inventorySlotItem.ConsumeItem();
+
             // can quick equip
+            if (!inventoryItemSO.isConsumable)
+            {
+                InventorySystem.Instance.SetEquippableItemToEmptyQuickSlot(inventorySlotItem);
+                Hide();
+            }
         });
         InventorySystem.Instance.OnInventoryItemChanged += InventorySystem_OnItemChanged;
 

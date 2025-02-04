@@ -5,7 +5,7 @@ using UnityEngine;
 
 public interface ICanvasManager
 {
-
+    public event EventHandler OnUIOpenChanged;
     public bool GetIsOpen();
     public void Show();
     public void Hide();

@@ -11,6 +11,13 @@ public class InventoryItemImage : MonoBehaviour
 
 
     [SerializeField] private Image backgroundImage;
+    [SerializeField] private bool showAmountText = true;
+
+
+    private void Start()
+    {
+        amountText.gameObject.SetActive(showAmountText);
+    }
 
 
     public void SetCraftItem(Sprite sprite, int amount)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,8 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
     private Vector3 startPosition;
     private Transform startParent;
 
+    public event EventHandler OnDragStart;
+
 
 
 
@@ -32,6 +35,8 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
         startParent = transform.parent;
         transform.SetParent(transform.root);
         itemBeingDragged = gameObject;
+
+        OnDragStart?.Invoke(this, EventArgs.Empty);
 
     }
 
@@ -57,6 +62,10 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
         }
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
+    }
+    public Transform GetStartParentTransform()
+    {
+        return startParent;
     }
 
 

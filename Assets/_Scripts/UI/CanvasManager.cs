@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,11 +30,29 @@ public class CanvasManager : MonoBehaviour
             }
         }
     }
-
-    private void Update()
+    private void Start()
+    {
+        foreach (ICanvasManager UI in UIList)
+        {
+            UI.OnUIOpenChanged += UI_OnOpenChanged;
+        }
+    }
+    private void OnDestroy()
+    {
+        foreach (ICanvasManager UI in UIList)
+        {
+            UI.OnUIOpenChanged -= UI_OnOpenChanged;
+        }
+    }
+    private void UI_OnOpenChanged(object sender, EventArgs args)
     {
         CheckUIOpenToSetLookAround();
     }
+
+    // private void Update()
+    // {
+    //     CheckUIOpenToSetLookAround();
+    // }
     private void CheckUIOpenToSetLookAround()
     {
         UpdateIsOpenUI();
@@ -42,6 +61,7 @@ public class CanvasManager : MonoBehaviour
             targetPointUI.Hide();
             MouseMovement.Instance.DisabledLookAround();
             GameInput.Instance.DisableJump();
+            GameInput.Instance.DisableAttack();
 
         }
         else
@@ -49,6 +69,7 @@ public class CanvasManager : MonoBehaviour
             targetPointUI.Show();
             MouseMovement.Instance.EnableLookAround();
             GameInput.Instance.EnableJump();
+            GameInput.Instance.EnableAttack();
         }
     }
     private void UpdateIsOpenUI()

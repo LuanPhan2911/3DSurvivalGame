@@ -8,7 +8,7 @@ public class CraftingSystem : MonoBehaviour
 {
     public static CraftingSystem Instance { get; private set; }
 
-    [SerializeField] public const float craftingTimerMax = 3f;
+    public const float craftingTimerMax = 1f;
 
 
     public class OnCraftingStateChangedEventArgs : EventArgs

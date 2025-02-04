@@ -19,8 +19,8 @@ public class InventoryCraftTabUI : BaseUI
                 TabButtonOnClick(navigationTabButton);
             });
         }
-        GameInput.Instance.OnOpenInventoryAction += GameInput_OpenInventory;
         TabButtonOnClick(activeTabButton);
+        GameInput.Instance.OnOpenInventoryAction += GameInput_OpenInventory;
         Hide();
     }
     private void OnDestroy()

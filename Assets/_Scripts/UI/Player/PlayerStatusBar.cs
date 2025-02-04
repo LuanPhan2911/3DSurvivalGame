@@ -27,22 +27,22 @@ public class PlayerStatusBar : MonoBehaviour
         Color color = defaultColor;
         if (isReversed)
         {
-            if (fillValue >= 0.75f)
+            if (fillValue >= 0.8f)
             {
                 color = dangerColor;
             }
-            else if (fillValue > 0.5f && fillValue < 0.75f)
+            else if (fillValue >= 0.5f && fillValue < 0.8f)
             {
                 color = warningColor;
             }
         }
         else
         {
-            if (fillValue <= 0.25)
+            if (fillValue <= 0.2)
             {
                 color = dangerColor;
             }
-            else if (fillValue > 0.25f && fillValue < 0.5f)
+            else if (fillValue > 0.2f && fillValue <= 0.5f)
             {
                 color = warningColor;
             }
@@ -56,7 +56,6 @@ public class PlayerStatusBar : MonoBehaviour
 
         filledImage.fillAmount = fillValue;
         filledImage.color = GetFilledBarColor(fillValue);
-
         animator.SetTrigger(IS_FLASH);
     }
 

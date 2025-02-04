@@ -21,6 +21,7 @@ public class CraftingItemUI : BaseUI
 
     public void SetCraftingItemSO(CraftingItemSO craftingItemSO)
     {
+        Show();
         this.craftingItemSO = craftingItemSO;
 
         titleText.text = craftingItemSO.inventoryItemSO.itemName;

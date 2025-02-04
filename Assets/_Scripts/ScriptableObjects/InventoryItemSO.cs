@@ -13,6 +13,7 @@ public class InventoryItemSO : ScriptableObject
     public float weight;
 
     public bool isConsumable;
+    public bool isEquippable;
     public float hpProvide;
     public float foodProvide;
     public float waterProvide;
