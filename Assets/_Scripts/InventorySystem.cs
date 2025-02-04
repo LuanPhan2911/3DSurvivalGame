@@ -24,6 +24,11 @@ public class InventorySystem : MonoBehaviour
         public InventoryItemSO inventoryItemSO;
     }
     public event EventHandler<OnInventoryItemChangedEventArgs> OnInventoryItemChanged;
+    public class OnEquippableItemSelectedEventArgs : EventArgs
+    {
+        public InventoryItemSO inventoryItem;
+    }
+    public event EventHandler<OnEquippableItemSelectedEventArgs> OnEquippableItemSelected;
 
     public enum ItemColor
     {
@@ -58,6 +63,7 @@ public class InventorySystem : MonoBehaviour
         {
             selectedQuickSlot.GetComponentInChildren<QuickSlotNumber>().SetUnselected();
             selectedQuickSlot = null;
+
         }
         else
         {
@@ -69,8 +75,13 @@ public class InventorySystem : MonoBehaviour
 
             selectedQuickSlot.GetComponentInChildren<QuickSlotNumber>().SetSelected();
 
-
         }
+
+        // selected quick slot can null
+        OnEquippableItemSelected?.Invoke(this, new OnEquippableItemSelectedEventArgs
+        {
+            inventoryItem = selectedQuickSlot?.GetComponentInChildren<InventorySlotItem>().GetInventoryItemSO()
+        });
     }
     public InventorySlotSingle GetSelectedQuickSlot()
     {

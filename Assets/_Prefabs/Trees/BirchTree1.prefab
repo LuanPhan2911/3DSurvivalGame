@@ -104,7 +104,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.64
+  m_Radius: 1
   m_Height: 13.553929
   m_Direction: 1
   m_Center: {x: 0.01, y: 5.69, z: 0.02}
@@ -116,6 +116,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 108932937717197802, guid: 583e391f5d8b17d469aa94cdb246c92d, type: 3}
+      propertyPath: m_Radius
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1465661302489222451, guid: 583e391f5d8b17d469aa94cdb246c92d, type: 3}
       propertyPath: originalObjectSO
       value: 

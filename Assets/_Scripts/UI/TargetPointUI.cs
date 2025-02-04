@@ -53,7 +53,7 @@ public class TargetPointUI : MonoBehaviour
             Transform selectionTransform = hit.transform;
             InteractableObject interactableObject = selectionTransform.GetComponentInParent<InteractableObject>();
 
-            if (interactableObject)
+            if (interactableObject && interactableObject.GetIsPlayerInRange())
             {
                 UpdateInteractObject(interactableObject);
             }
@@ -78,25 +78,23 @@ public class TargetPointUI : MonoBehaviour
 
     private void UpdateInteractObject(InteractableObject interactObject)
     {
-        if (interactObject.GetIsPlayerInRange())
+
+
+        interactedGameObject = interactObject.gameObject;
+        isTarget = true;
+
+        infoText.text = interactObject.GetOriginalObjectSO().objectName;
+        infoText.gameObject.SetActive(true);
+
+        // update cursor hand if can pick up
+        if (interactObject.IsCanPickedUp())
         {
-            //player in range that can interact to object
-
-            interactedGameObject = interactObject.gameObject;
-            isTarget = true;
-
-            infoText.text = interactObject.GetOriginalObjectSO().objectName;
-            infoText.gameObject.SetActive(true);
-
-            // update cursor hand if can pick up
-            if (interactObject.IsCanPickedUp())
-            {
-                SetCenterImage(handSprite, Vector3.one);
-            }
-
-
-
+            SetCenterImage(handSprite, Vector3.one);
         }
+
+
+
+
     }
     public GameObject GetInteractionGameObject()
     {
