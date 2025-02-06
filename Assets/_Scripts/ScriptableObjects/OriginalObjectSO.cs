@@ -6,10 +6,10 @@ using UnityEngine;
 public class OriginalObjectSO : ScriptableObject
 {
     public string objectName;
-    public InventoryItemSO inventoryItemSO;
     public int maxHP;
     public int maxAmountItemProvided;
     public bool canPickedUp = false;
+    public InventoryItemSO inventoryItemSO;
 
 
 }

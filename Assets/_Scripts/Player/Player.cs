@@ -48,7 +48,8 @@ public class Player : MonoBehaviour
 
     public int GetDamage()
     {
-        return damage;
+        int bonus = UnityEngine.Random.Range(0, 5);
+        return damage + bonus;
     }
     private void InstantiateEquippableTool(Transform equippableTransformPrefab)
     {

@@ -187,14 +187,14 @@ public class InventorySlotItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void ConsumeItem()
     {
-        if (!inventoryItemSO.isConsumable)
+        if (!TryGetFoodInventoryItemSO(out FoodInventoryItemSO foodInventoryItemSO))
         {
             Debug.Log("Inventory item cannot consume");
             return;
         }
-        PlayerStatus.Instance.SetHp(inventoryItemSO.hpProvide);
-        PlayerStatus.Instance.SetFood(inventoryItemSO.foodProvide);
-        PlayerStatus.Instance.SetWater(inventoryItemSO.waterProvide);
+        PlayerStatus.Instance.SetHp(foodInventoryItemSO.hpProvide);
+        PlayerStatus.Instance.SetFood(foodInventoryItemSO.foodProvide);
+        PlayerStatus.Instance.SetWater(foodInventoryItemSO.waterProvide);
 
 
         InventorySystem.Instance.RemoveItemInInventory(this, 1, () =>
@@ -202,6 +202,27 @@ public class InventorySlotItem : MonoBehaviour, IPointerEnterHandler, IPointerEx
             InventorySystem.Instance.inventoryItemInfoUI.Hide();
         });
 
+    }
+    public bool TryGetFoodInventoryItemSO(out FoodInventoryItemSO foodInventoryItemSO)
+    {
+        if (!inventoryItemSO || !inventoryItemSO.isConsumable)
+        {
+            foodInventoryItemSO = null;
+            return false;
+        }
+        foodInventoryItemSO = inventoryItemSO as FoodInventoryItemSO;
+        return true;
+
+    }
+    public bool TryGetEquippableInventoryItemSO(out EquippableInventoryItemSO equippableInventoryItemSO)
+    {
+        if (!inventoryItemSO || !inventoryItemSO.isEquippable)
+        {
+            equippableInventoryItemSO = null;
+            return false;
+        }
+        equippableInventoryItemSO = inventoryItemSO as EquippableInventoryItemSO;
+        return true;
     }
     public void SetInventorySlot(InventorySlotSingle inventorySlot)
     {

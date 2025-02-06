@@ -26,7 +26,7 @@ public class InventorySystem : MonoBehaviour
     public event EventHandler<OnInventoryItemChangedEventArgs> OnInventoryItemChanged;
     public class OnEquippableItemSelectedEventArgs : EventArgs
     {
-        public InventoryItemSO inventoryItem;
+        public EquippableInventoryItemSO inventoryItem;
     }
     public event EventHandler<OnEquippableItemSelectedEventArgs> OnEquippableItemSelected;
 
@@ -77,12 +77,29 @@ public class InventorySystem : MonoBehaviour
 
         }
 
-        // selected quick slot can null
-        OnEquippableItemSelected?.Invoke(this, new OnEquippableItemSelectedEventArgs
+        if (!selectedQuickSlot)
         {
-            inventoryItem = selectedQuickSlot?.GetComponentInChildren<InventorySlotItem>().GetInventoryItemSO()
-        });
+            OnEquippableItemSelected?.Invoke(this, new OnEquippableItemSelectedEventArgs
+            {
+                inventoryItem = null
+            });
+        }
+        else
+        {
+            if (selectedQuickSlot.InventorySlotItem.TryGetEquippableInventoryItemSO(out EquippableInventoryItemSO equippableInventoryItemSO))
+            {
+                OnEquippableItemSelected?.Invoke(this, new OnEquippableItemSelectedEventArgs
+                {
+                    inventoryItem = equippableInventoryItemSO
+                });
+            }
+            // selected quick slot can null
+        }
+
+
     }
+
+
     public InventorySlotSingle GetSelectedQuickSlot()
     {
         return selectedQuickSlot;
@@ -219,7 +236,7 @@ public class InventorySystem : MonoBehaviour
 
 
 
-    public void AddToInventory(InteractableObject interactableObject, int amount)
+    public void AddToInventory(BaseInteractableObject interactableObject, int amount)
     {
 
         int maxAmountAdded = interactableObject.GetInventoryItemSO().maxAmountInSlot;

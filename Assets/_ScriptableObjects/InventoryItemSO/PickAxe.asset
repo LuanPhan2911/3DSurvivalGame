@@ -9,17 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8efdb6ae10c327a4893da452d799558f, type: 3}
+  m_Script: {fileID: 11500000, guid: 58a6ed40acde5c7499c22fc553eb8096, type: 3}
   m_Name: PickAxe
   m_EditorClassIdentifier: 
-  itemName: Pick Axe
-  description: Pick Axe
-  sprite: {fileID: 21300000, guid: b54b94da5cee5c046bf327246ac181e6, type: 3}
-  itemModel: {fileID: 7702085407269248752, guid: 683b0fd1383c5394bacba8b255d0d7d8, type: 3}
+  itemName: 
+  description: 
+  sprite: {fileID: 0}
   maxAmountInSlot: 1
-  weight: 2
+  weight: 0
   isConsumable: 0
-  isEquippable: 1
-  hpProvide: 0
-  foodProvide: 0
-  waterProvide: 0
+  isEquippable: 0
+  itemModel: {fileID: 0}

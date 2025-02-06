@@ -51,9 +51,9 @@ public class TargetPointUI : MonoBehaviour
         {
 
             Transform selectionTransform = hit.transform;
-            InteractableObject interactableObject = selectionTransform.GetComponentInParent<InteractableObject>();
+            BaseInteractableObject interactableObject = selectionTransform.GetComponentInParent<BaseInteractableObject>();
 
-            if (interactableObject && interactableObject.GetIsPlayerInRange())
+            if (interactableObject && interactableObject.IsPlayerInRange())
             {
                 UpdateInteractObject(interactableObject);
             }
@@ -76,7 +76,7 @@ public class TargetPointUI : MonoBehaviour
     }
 
 
-    private void UpdateInteractObject(InteractableObject interactObject)
+    private void UpdateInteractObject(BaseInteractableObject interactObject)
     {
 
 
