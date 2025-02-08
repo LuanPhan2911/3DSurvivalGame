@@ -26,13 +26,6 @@ public class PickUpableObject : BaseInteractableObject
     {
         return originalObjectSO.maxAmountItemProvided;
     }
-    public override bool IsCanInteract()
-    {
-        return base.IsCanInteract() && originalObjectSO.canPickedUp;
-    }
-    protected override bool IsNeedDestroy()
-    {
-        return originalObjectSO.canPickedUp;
-    }
+
 
 }

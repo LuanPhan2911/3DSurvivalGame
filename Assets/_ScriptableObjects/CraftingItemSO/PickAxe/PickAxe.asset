@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b81e0f7f7469a2b44acb4ea7335e9d19, type: 3}
   m_Name: PickAxe
   m_EditorClassIdentifier: 
-  Id: 1ae87ef9-69fa-4a71-97e7-af92ae12f135
   inventoryItemSO: {fileID: 11400000, guid: a6c43be85d4f9d54bb542b626cf116a9, type: 2}
   craftingRequiredItemSOList:
   - {fileID: 11400000, guid: d13a7e1ccaff10746ba84500cb59009e, type: 2}

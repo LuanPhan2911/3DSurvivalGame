@@ -7,8 +7,13 @@ public class Player : MonoBehaviour
 {
     public static Player Instance { get; private set; }
     [SerializeField] private Transform toolHolderTransform;
+    [SerializeField] private PlayerVisual playerVisual;
 
     private EquippableTool equippableTool;
+
+
+
+
 
     private int damage = 5;
 
@@ -28,10 +33,27 @@ public class Player : MonoBehaviour
     }
     private void GameInput_OnAttack(object sender, EventArgs eventArgs)
     {
-        if (equippableTool)
+        if (HasEquippableTool())
         {
-            equippableTool.StartAnimation();
+            BaseInteractableObject baseInteractableObject = TargetPointUI.Instance.GetInteractableObject();
+            if (baseInteractableObject && baseInteractableObject.IsCanPickedUp())
+            {
+                // can pick up item
+                // playerVisual.StartAnimation();
+            }
+            else
+            {
+                equippableTool.StartAnimation();
+                //equip tool
+            }
+
         }
+        else
+        {
+            // not equip tool
+            // playerVisual.StartAnimation();
+        }
+
     }
     private void InventorySystem_OnEquippableItemSelected(object sender, InventorySystem.OnEquippableItemSelectedEventArgs args)
     {
@@ -48,7 +70,7 @@ public class Player : MonoBehaviour
 
     public int GetDamage()
     {
-        int bonus = UnityEngine.Random.Range(0, 5);
+        int bonus = UnityEngine.Random.Range(0, 2);
         return damage + bonus;
     }
     private void InstantiateEquippableTool(Transform equippableTransformPrefab)
@@ -63,6 +85,14 @@ public class Player : MonoBehaviour
             Destroy(equippableTool.gameObject);
             equippableTool = null;
         }
+    }
+    public bool HasEquippableTool()
+    {
+        return equippableTool != null;
+    }
+    public PlayerVisual GetPlayerVisual()
+    {
+        return playerVisual;
     }
 
 }

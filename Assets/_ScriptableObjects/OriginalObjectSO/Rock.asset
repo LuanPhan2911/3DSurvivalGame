@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54b10c1397821094ebef8300ce8f45aa, type: 3}
   m_Name: Rock
   m_EditorClassIdentifier: 
-  Id: 436e9326-8a12-4384-8f40-4f2cafd18bf5
   objectName: Rock
-  inventoryItemSO: {fileID: 11400000, guid: d52b59d18728f6e48b8576ea4ecda2fa, type: 2}
-  maxHP: 20
+  maxHP: 50
   maxAmountItemProvided: 20
+  canPickedUp: 0
+  inventoryItemSO: {fileID: 11400000, guid: d52b59d18728f6e48b8576ea4ecda2fa, type: 2}

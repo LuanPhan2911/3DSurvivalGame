@@ -13,15 +13,7 @@ public class TargetPointUI : MonoBehaviour
     [SerializeField] private Sprite handSprite;
     [SerializeField] private Image centerImage;
     private Vector3 defaultScaler;
-
-
-
-
-
-
-    private bool isTarget;
-
-    private GameObject interactedGameObject;
+    private BaseInteractableObject interactableObject;
 
     private void Awake()
     {
@@ -51,17 +43,15 @@ public class TargetPointUI : MonoBehaviour
         {
 
             Transform selectionTransform = hit.transform;
-            BaseInteractableObject interactableObject = selectionTransform.GetComponentInParent<BaseInteractableObject>();
-
+            interactableObject = selectionTransform.GetComponentInParent<BaseInteractableObject>();
             if (interactableObject && interactableObject.IsPlayerInRange())
             {
-                UpdateInteractObject(interactableObject);
+                UpdateInteractObject();
             }
             else
             {
                 infoText.gameObject.SetActive(false);
-                isTarget = false;
-
+                interactableObject = null;
                 SetCenterImage(defaultSprite, defaultScaler);
             }
 
@@ -70,42 +60,37 @@ public class TargetPointUI : MonoBehaviour
         {
             // don't hit anything, hidden selection information
             infoText.gameObject.SetActive(false);
-            isTarget = false;
+            interactableObject = null;
             SetCenterImage(defaultSprite, defaultScaler);
         }
     }
 
 
-    private void UpdateInteractObject(BaseInteractableObject interactObject)
+    private void UpdateInteractObject()
     {
 
-
-        interactedGameObject = interactObject.gameObject;
-        isTarget = true;
-
-        infoText.text = interactObject.GetOriginalObjectSO().objectName;
+        infoText.text = interactableObject.GetOriginalObjectSO().objectName;
         infoText.gameObject.SetActive(true);
 
         // update cursor hand if can pick up
-        if (interactObject.IsCanPickedUp())
+        if (interactableObject.IsCanPickedUp())
         {
             SetCenterImage(handSprite, Vector3.one);
         }
-
-
-
-
+        else
+        {
+            SetCenterImage(defaultSprite, defaultScaler);
+        }
     }
-    public GameObject GetInteractionGameObject()
+
+    public BaseInteractableObject GetInteractableObject()
     {
-        return interactedGameObject;
+        return interactableObject;
     }
-
-    public bool GetIsTarget()
+    public bool IsTarget(BaseInteractableObject baseInteractableObject)
     {
-        return isTarget;
+        return interactableObject == baseInteractableObject;
     }
-
     public void Show()
     {
         gameObject.SetActive(true);

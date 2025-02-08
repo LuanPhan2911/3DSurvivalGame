@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public abstract class BaseInteractableObject : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public abstract class BaseInteractableObject : MonoBehaviour
     private void Start()
     {
         GameInput.Instance.OnAttackAction += GameInput_OnAttackAction;
+
+
     }
 
     protected void SetOriginalObjectHP(int changedHpValue)
@@ -30,16 +33,15 @@ public abstract class BaseInteractableObject : MonoBehaviour
         GameInput.Instance.OnAttackAction -= GameInput_OnAttackAction;
     }
 
-    protected abstract int GetAmountItemProvided();
-    protected abstract bool IsNeedDestroy();
-
-
-
-    public virtual bool IsCanInteract()
+    protected virtual int GetAmountItemProvided()
     {
-        return isPlayerInRange && TargetPointUI.Instance.GetIsTarget() &&
-         TargetPointUI.Instance.GetInteractionGameObject() == gameObject &&
-         TargetPointUI.Instance.gameObject.activeSelf;
+        int bonus = UnityEngine.Random.Range(0, 2);
+        float rate = (float)Player.Instance.GetDamage() / originalObjectSO.maxHP;
+        return Mathf.RoundToInt(rate * originalObjectSO.maxAmountItemProvided) + bonus;
+    }
+    protected virtual bool IsNeedDestroy()
+    {
+        return Hp == 0;
     }
     public OriginalObjectSO GetOriginalObjectSO()
     {
@@ -53,7 +55,6 @@ public abstract class BaseInteractableObject : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-
         if (other.CompareTag("Player"))
         {
             isPlayerInRange = false;
@@ -62,7 +63,6 @@ public abstract class BaseInteractableObject : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-
         if (other.CompareTag("Player"))
         {
             isPlayerInRange = true;
@@ -76,6 +76,10 @@ public abstract class BaseInteractableObject : MonoBehaviour
     public bool IsCanPickedUp()
     {
         return originalObjectSO.canPickedUp;
+    }
+    public virtual bool IsCanInteract()
+    {
+        return isPlayerInRange && TargetPointUI.Instance.IsTarget(this);
     }
 
 

@@ -25,6 +25,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float staminaRestoreWhenWalking = 5f;
     [SerializeField] private float staminaRestore = 10f;
 
+
+
     private Vector3 velocity;
 
     private bool isGrounded;
@@ -100,6 +102,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (isWalking && PlayerStatus.Instance.CanSprint())
             {
+
                 delayRestoreStaminaTimer = delayRestoreStaminaTimerMax;
                 speed = sprintSpeed;
                 if (PlayerStatus.Instance.IsMidOverweight())
@@ -140,9 +143,11 @@ public class PlayerMovement : MonoBehaviour
 
         //right is the red Axis, foward is the blue axis
         Vector3 move = transform.right * x + transform.forward * z;
-        if (move != Vector3.zero)
+        if (move != Vector3.zero && isGrounded && !isSprinting)
         {
+
             isWalking = true;
+
         }
         else
         {
@@ -154,6 +159,7 @@ public class PlayerMovement : MonoBehaviour
         //check if the player is on the ground so he can jump
         if (IsPlayerCanJump())
         {
+
             //the equation for jumping
             if (PlayerStatus.Instance.IsMidOverweight())
             {
@@ -166,6 +172,7 @@ public class PlayerMovement : MonoBehaviour
 
         }
 
+
         velocity.y += gravity * Time.deltaTime;
 
         controller.Move(velocity * Time.deltaTime);
@@ -176,8 +183,9 @@ public class PlayerMovement : MonoBehaviour
         !PlayerStatus.Instance.IsOverweight();
     }
 
-    public bool GetIsSprinting()
+    public bool IsSprinting()
     {
         return isSprinting;
     }
+
 }

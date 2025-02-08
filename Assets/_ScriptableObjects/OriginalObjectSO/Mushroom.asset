@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Mushroom
   m_EditorClassIdentifier: 
   objectName: Mushroom
-  inventoryItemSO: {fileID: 11400000, guid: fee552f6458ac81449ac3edda389ec96, type: 2}
   maxHP: 0
   maxAmountItemProvided: 2
   canPickedUp: 1
+  inventoryItemSO: {fileID: 11400000, guid: 8f44678326a51fb409ac3b4042033cd0, type: 2}

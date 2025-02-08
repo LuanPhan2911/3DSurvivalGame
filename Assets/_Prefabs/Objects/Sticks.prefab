@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6850845895961823082}
-  - component: {fileID: 4331596868660569906}
   - component: {fileID: 1973903562915560898}
+  - component: {fileID: 297564470533120743}
   m_Layer: 0
   m_Name: Sticks
   m_TagString: Untagged
@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 902659295516038116}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 11.247, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -37,8 +37,21 @@ Transform:
   - {fileID: 4152627647935393420}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &4331596868660569906
-SphereCollider:
+--- !u!114 &1973903562915560898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 902659295516038116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2512239513f92d47b8320fe1239893a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  originalObjectSO: {fileID: 11400000, guid: 08d4b6e233db2144ea85d8889c285fbc, type: 2}
+--- !u!65 &297564470533120743
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -56,21 +69,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 2
-  m_Center: {x: 0.29, y: 0, z: 0}
---- !u!114 &1973903562915560898
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 902659295516038116}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2512239513f92d47b8320fe1239893a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  originalObjectSO: {fileID: 11400000, guid: 08d4b6e233db2144ea85d8889c285fbc, type: 2}
+  m_Size: {x: 5, y: 1, z: 5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2016649837895990445
 GameObject:
   m_ObjectHideFlags: 0

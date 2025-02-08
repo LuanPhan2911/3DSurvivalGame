@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b18efb921c695634ca2bd1e4038ac814, type: 3}
+  m_Name: PlayerAudioClipSO
+  m_EditorClassIdentifier: 
+  walking: {fileID: 8300000, guid: 99847f53c30805643b0e9faec14679fa, type: 3}
+  running: {fileID: 8300000, guid: 860802e72e5090247a0f3d3616efe7cd, type: 3}
+  jumping: {fileID: 8300000, guid: abc7599edcac1354c9ce2ea4c7462b16, type: 3}
